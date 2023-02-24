@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../static/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../static/font-awesome-4.7.0/css/font-awesome.css">
+    <style>
+        html,
+        body {
+            height: 98%;
+            margin: 0;
+            padding: 0;
+        }
+        .wrap {
+            height: 100%;
+        }
+        .clear{
+            position: absolute;
+            height: 36px;
+            margin-left: 80%;
+            width: 38px;
+            background-color: white;
+            border: none;
+            top: 1px
+        }
+    </style>
+</head>
+<body style="height:100%;width:99%;">
+<div class="wrap" style="margin-left: 10px">
+    <table class="layui-hide" id="user" lay-filter="user" ></table>
+    <script type="text/html" id="toolbar">
+        <div class="layui-inline">
+            <button id="clearup" class="fa fa-times clear"></button>
+            <input class="layui-input" id="input" autocomplete="off" placeholder="姓名/账号" value="">
+        </div>
+        <button class="layui-btn" id = "search" data-type = "reload">查询</button>
+        {% if anzs == 1 %}
+        <a class="layui-btn" id="insert" style="float: right" lay-event="insert">新增</a>
+        {% else %}
+        <a class="layui-btn layui-hide"  style="float: right" >新增</a>
+        {% endif %}
+    </script>
+    <script type="text/html" id="barDemo">
+        {% verbatim %}
+        {{#  if(d.sfkck == '1'){ }}
+        <a class="layui-btn layui-btn-primary layui-btn-xs detail" lay-event="detail">查看</a>
+        {{#  } else { }}
+        <a class="layui-btn layui-btn-primary layui-btn-xs detail layui-btn-disabled">查看</a>
+        {{#  } }}
+        {{#  if(d.sfkbj == '1'){ }}
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        {{#  if(d.sfcj == '0'){ }}
+        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="gather">采集</a>
+        {{#  } else { }}
+        <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="gather">更新</a>
+        {{#  } }}
+        {{#  } else { }}
+        <a class="layui-btn layui-btn-xs layui-btn-disabled">编辑</a>
+        {{#  if(d.sfcj == '0'){ }}
+        <a class="layui-btn layui-btn-xs layui-btn-normal layui-btn-disabled">采集</a>
+        {{#  } else { }}
+        <a class="layui-btn layui-btn-xs layui-btn-warm layui-btn-disabled">更新</a>
+        {{#  } }}
+        {{#  } }}
+        {{#  if(d.sfksc == '1'){ }}
+        <a class="layui-btn layui-btn-danger layui-btn-xs del" lay-event="del">删除</a>
+        {{#  } else { }}
+        <a class="layui-btn layui-btn-danger layui-btn-xs del layui-btn-disabled">删除</a>
+        {{#  } }}
+        {% endverbatim %}
+    </script>
+</div>
+<script src="/static/layui/layui.js" charset="utf-8"></script>
+<script src="/static/js/jquery-3.3.1.min.js" charset="utf-8"></script>
+<script src="/static/js/jquery.cookie.js" charset="utf-8"></script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+        re_url = "{{url_data|safe}}";
+
+        table.render({
+            elem: '#user',
+            height: 'full-30',
+            toolbar: '#toolbar'
+            ,cellMinWidth: 250
+            ,url:'user_data.html'
+            ,title: '用户数据表'
+            ,where: {type:re_url}
+            ,cols: [[
+                {field:'order', title:'序号',align:'center', width:80, unresize: true, sort: true}
+                ,{field:'account', title:'账号', width:'10%',sort: true}
+                ,{field:'name', title:'用户名', width:'10%',sort: true}
+                ,{field:'org_name', title:'所在部门', width:110, sort: true}
+                ,{field:'gender', title:'性别', align:'center',width:100,sort: true}
+                ,{field:'tell', title:'电话', width:'10%'}
+                ,{field:'email', title:'邮箱', width:'15%', sort: true}
+                ,{field:'pdcj', title:'是否采集',align:'center',width:120,sort: true}
+                ,{field:'sfqy', title:'是否启用',align:'center',width:120,sort: true}
+                ,{field:'level', title:'账户类型', width:130, sort: true}
+                ,{ title:'操作',align:'center',minwidth:150,toolbar: '#barDemo'}
+            ]]
+            ,page: true
+            ,id:'Reload'
+        });
+
+        //表格工具栏事件监听
+        table.on('toolbar(user)', function(obj){
+            switch(obj.event){
+                case 'insert':
+                    layer.open({
+                        type: 2 //Page层类型
+                        ,area: ['60%', '80%']
+                        ,title: '新增用户'
+                        ,shade: 0.6 //遮罩透明度
+                        ,anim: 4 //0-6的动画形式，-1不开启
+                        ,content:['user_insert.html/']+ "?type=" + re_url
+                    });
+                    break;
+            };
+        });
+
+        //监听工具条
+        table.on('tool(user)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'detail'){
+                layer.open({
+                    type: 2 //Page层类型
+                    ,area: ['60%', '80%']
+                    ,title: '用户详细信息'
+                    ,shade: 0.6 //遮罩透明度
+                    ,anim: 4 //0-6的动画形式，-1不开启
+                    ,content:['user_detail.html/'] + "?role_id=" + data.id + "&type=" + re_url
+                });
+            } else if(obj.event === 'del'){
+                layer.confirm('你确定要删除当前数据？', {
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    layer.load(0, {shade: [0.2, '#5B5B5B']});
+                    $.ajax({
+                        url: 'user_del.html',
+                        type: 'POST',
+                        data:{'key': 'delete','ID':data.id,'name':data.name,'type':re_url},
+                        headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+                        success: function (base) {
+                            if (base == 'true'){
+                                layer.msg('删除用户成功！', {icon: 1});
+                                setTimeout("window.location.reload();", 2000 )
+                            }else if (base == 'false'){
+                                layer.msg('当前用户没有相关权限，请联系管理员！', {icon: 2});
+                                setTimeout("window.location.reload();", 2000 )
+                            }
+                            else {
+                                layer.msg('删除用户失败，请联系管理员！', {icon: 2});
+                                setTimeout("window.location.reload();", 2000 )
+                            }
+                        }
+                    })
+                });
+                return false;
+            } else if(obj.event === 'edit'){
+                layer.open({
+                    type: 2 //Page层类型
+                    ,area: ['60%', '80%']
+                    ,title: '编辑用户信息'
+                    ,shade: 0.6 //遮罩透明度
+                    ,anim: 4 //0-6的动画形式，-1不开启
+                    ,content:['user_edit.html/'] + "?user_id=" + data.id + "&type=" + re_url
+                });
+            }else if(obj.event === 'gather'){
+                var index = layer.load(2, {shade: [0.2, '#5B5B5B']});
+                $.ajax({
+                    url: 'face_gather.html',
+                    type: 'POST',
+                    data:{'key': '人脸采集','account':data.account,'id':data.id,'zt':data.sfcj,'type':re_url},
+                    headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+                    success: function (base) {
+                        if (base == 'true'){
+                            layer.msg('人脸信息采集完成！', {icon: 1});
+                            setTimeout("window.location.reload();", 2000 )
+                        }else if(base == 'false'){
+                            layer.msg('你没有操作权限，请联系系统管理员！', {icon: 2});
+                            setTimeout("window.location.reload();", 2000 )
+                        }
+                        else {
+                            layer.close(index);
+                            layer.msg('信息采集失败，请联系系统管理员！', {icon: 2});
+                        }
+                    }
+                })
+            }
+        });
+        var $ = layui.$, active = {
+            reload:function(){
+                var values =$("#input").val();
+                var index = layer.load(2, {shade: [0.2, '#5B5B5B']});
+                table.reload('Reload',
+                    {page:
+                            {
+                                curr: 1 //重新从第 1 页开始
+                            }
+                        ,where: {keyword:values}//这里传参  向后台
+                    });
+                $("#input").attr("value", values);
+                layer.close(index);
+            }
+        };
+        $('body').on('click','#search', function(){
+            var type = 'reload';
+            active[type] ? active[type].call(this) : '';
+        });
+        $('body').on('click','#clearup', function(){
+            $("#input").val("");
+            $('#input').attr('placeholder','姓名/账号');
+        });
+        document.onkeydown = function(){
+            if(window.event.keyCode == 13){
+                $('#search').click()
+            }
+        }
+    });
+</script>
+</body>
+</html>

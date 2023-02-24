@@ -1,0 +1,187 @@
+<html>
+<!DOCTYPE html>
+<head>
+    <title>实时监测</title>
+{#    <link rel="stylesheet" href="../../static/admin/css/global.css">#}
+    <link rel="stylesheet" href="../../static/admin/css/grid.css">
+    <link rel="stylesheet" href="../../static/admin/layui/layui/css/layui.css"/>
+    <script src="../../static/admin/layui/layui/layui.all.js"></script>
+    <script src="../../static/admin/js/jquery-1.8.2.js"></script>
+    <script src="../../static/admin/js/base.js"></script>
+    <script src="../../static/admin/js/chat.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body style="margin-top: 25px;background-color: cadetblue">
+
+<div class="layui-container fly-marginTop">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md7" style="height: 530px">
+            <div class="layui-card">
+                <div class="layui-card-header" style="text-align:center">
+                    <font size="5">1号监测节点</font>
+                </div>
+                <div class="layui-card-body">
+                    <div style="height:450px; width: 100%;">
+                        <!--  <video id="mainVideo" style="height: 80%; width:100%;" autoplay></video> -->
+                        <iframe scrolling="no" style="height: 370px; width:100%;" src="rtmp.html"
+                                frameborder="no"></iframe>
+                        <div id="joinUsers" style="height: 19%;padding-top:1%; line-height: 1;">
+                            <br>
+                            节点状态：在线<br>
+                            <br>
+                            监测位置:XX省XX市XX森林保护区<br>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md5" style="width: 32%">
+            <div class="layui-card">
+                <div class="layui-card-header">实时会话</div>
+                <div class="layui-card-body" style="height:62%;">
+                    <div style="height:70%;">
+                        <div class="chatbox" style="width: 100%;height:95%;">
+                            <ul>
+<!--                                <li>-->
+<!--                                    <div class="layim-chat-user"><cite>系统消息</cite></div>-->
+<!--                                    <div class="layim-chat-text">1号监测节点疑似出现大熊猫，请注意！</div>-->
+<!--                                </li>-->
+<!--                                <li class="layim-chat-mine">-->
+<!--                                    <div class="layim-chat-user"><cite>管理员-001号</cite></div>-->
+<!--                                    <div class="layim-chat-text">@监测员-006号 注意监测！-->
+<!--                                    </div>-->
+<!--                                </li>-->
+<!--                                <li>-->
+<!--                                    <div class="layim-chat-user"><cite>监测员-006号</cite></div>-->
+<!--                                    <div class="layim-chat-text">收到！</div>-->
+<!--                                </li>-->
+                            </ul>
+                        </div>
+                        <div class="inputbox"
+                             style="width: 100%;height:39%;padding-top:1%;box-sizing: border-box;  border-top:1px solid #ccc;">
+                            <textarea style="width: 100%;height:100%;resize: none; border: none;"
+                                      id="inputcontent"></textarea>
+                            <div class="input_btns" style="position: absolute; bottom: 20px;right:20px;">
+                                <button class="layui-btn" id="sendMsg">
+                                    <i class="layui-icon layui-icon-release"></i>
+                                    发送
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+
+    .chatbox {
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding-right: 15px;
+        box-sizing: content-box;
+    }
+
+    .chatbox ul .layim-chat-mine {
+        text-align: right;
+        padding-left: 0;
+        padding-right: 10px;
+    }
+
+    .chatbox ul li {
+        position: relative;
+        margin-bottom: 10px;
+        padding-left: 10px;
+        min-height: 68px;
+    }
+
+    .layim-chat-user img {
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+    }
+
+    .layim-chat-mine .layim-chat-user {
+        left: auto;
+        right: 3px;
+    }
+
+    .layim-chat-user {
+        position: absolute;
+        left: 3px;
+    }
+
+    .layim-chat-mine .layim-chat-user cite {
+        left: auto;
+        right: 10px;
+        text-align: right;
+    }
+
+    .layim-chat-user cite {
+        position: absolute;
+        left: 10px;
+        top: -2px;
+        width: 500px;
+        line-height: 24px;
+        font-size: 12px;
+        white-space: nowrap;
+        color: #999;
+        text-align: left;
+        font-style: normal;
+    }
+
+    .layim-chat-mine .layim-chat-text {
+        margin-left: 0;
+        text-align: left;
+        background-color: #5FB878;
+        color: #fff;
+    }
+
+    .layim-chat-text {
+        position: relative;
+        line-height: 22px;
+        margin-top: 25px;
+        padding: 8px 15px;
+        background-color: #e2e2e2;
+        border-radius: 3px;
+        color: #333;
+        word-break: break-all;
+        max-width: 462px \9;
+    }
+
+    .layim-chat-text, .layim-chat-user {
+        display: inline-block;
+        *display: inline;
+        *zoom: 1;
+        vertical-align: top;
+        font-size: 14px;
+    }
+
+    .layim-chat-mine .layim-chat-user cite i {
+        padding-right: 15px;
+    }
+
+    .layim-chat-user cite i {
+        padding-right: 15px;
+        font-style: normal;
+    }
+
+    .layim-chat-system i {
+        padding-right: 15px;
+        font-style: normal;
+    }
+
+    .layim-chat-system span {
+        display: inline-block;
+        line-height: 30px;
+        padding: 0 15px;
+        border-radius: 3px;
+        background-color: #e2e2e2;
+        cursor: default;
+        font-size: 13px;
+    }
+</style>
+</body>
+</html>

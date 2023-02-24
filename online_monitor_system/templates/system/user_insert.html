@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="../../static/admin/layui/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../static/admin/css/admin.css"/>
+</head>
+<body>
+<div class="layui-tab page-content-wrap">
+    <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">
+            <form class="layui-form"  style="width: 90%;padding-top: 20px;">
+                {% csrf_token %}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">登录账号：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="account" lay-verify="account" placeholder="登录账号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户名：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name"  lay-verify="username" placeholder="用户姓名" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item" pane="">
+                    <label class="layui-form-label">性别：</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="sex" value="男" title="男" checked="">
+                        <input type="radio" name="sex" value="女" title="女">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">账号类型：</label>
+                    <div class="layui-input-block">
+                        <select id="text1" lay-verify="Pname" class="layui-input">
+                            <option value="">请点击后选择</option>
+                            {% for m,k in user_type.items %}
+                            <option value={{ m }}>{{ k }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">新密码：</label>
+                    <div class="layui-input-block">
+                        <input type="password" name="password2" lay-verify="password" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">重复密码：</label>
+                    <div class="layui-input-block">
+                        <input type="password" name="password3" lay-verify="password" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">组织机构：</label>
+                    <div class="layui-input-block">
+                        <div id="tree" lay-verify="tree" class="xm-select-demo"></div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">地址：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="address" lay-verify="required" placeholder="请输入住址" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">电话：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="tell" lay-verify="phone" placeholder="请输入电话" autocomplete="off" class="layui-input" >
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">邮箱：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="email" lay-verify="email" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="adminInfo" style="margin-top: 30px">立即提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="../../static/admin/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../static/js/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../static/js/jquery.cookie.js"></script>
+<script src="../../static/js/xm-select.js"></script>
+<script>
+    //插件地址：https://maplemei.gitee.io/xm-select/#/senior/getValue
+    var tree = xmSelect.render({
+        el: '#tree',
+        autoRow: true,
+        max: 5,
+        filterable: true,
+        prop: {
+            name: 'title',
+            value: 'id',
+        },
+        tree: {
+            show: true,
+            showFolderIcon: true,
+            showLine: true,
+            indent: 20,
+            expandedKeys: [ -1 ],
+            lazy: true,
+            //是否严格遵守父子模式
+            strict: false,
+            load: function(item, cb){
+                setTimeout(function(){
+                    if(item.name.endsWith('2')){
+                        return cb([]);
+                    }
+                    cb([
+                        {name: item.name + 1, value: item.value + '1', children: [] },
+                        {name: item.name + 2, value: item.value + '2', children: [] },
+                    ])
+                }, 500)
+            }
+        },
+        height: 'auto',
+        data(){
+            return {{ data | safe }}
+        }
+    })
+</script>
+<script>
+    layui.use(['form','element'], function() {
+        var form = layui.form();
+        form.verify({
+            Pname: function(value){
+                if(value.length < 1){
+                    return '请选择账户类型！';
+                }
+            }
+            ,required: function(value){
+                if(value.length < 5){
+                    return '地址长度不得小于5';
+                }
+            }
+            ,tree: function(){
+                var selectArr =  tree.getValue('value');
+                if(selectArr.length < 1){
+                    return '请选择组织机构！';
+                }else if(selectArr.length > 5){
+                    return '组织机构最多选择5个！';
+                }
+            }
+            ,account: function(value){
+                if(value.length < 1){
+                    return '请填写注册账号';
+                }
+            }
+            ,username: function(value){
+                if(value.length < 1){
+                    return '请填写用户姓名';
+                }
+            }
+            ,password: [
+                /^[\S]{6,12}$/
+                ,'密码必须6到12位，且不能出现空格'
+            ]
+            ,content: function(value){
+                layedit.sync(editIndex);
+            }
+        });
+        form.on('submit(adminInfo)', function(data){
+            var index = layer.load(2, {shade: [0.2, '#5B5B5B']});
+            var P_m_id=$("#text1 option:selected").val();
+            $.ajax({
+                url: 'user_insert.html',
+                type: 'POST',
+                data:{'key': 'user_insert','base':data.field,'user_type':P_m_id},
+                headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+                success: function (base) {
+                    if (base == 'true'){
+                        layer.msg('添加用户成功！', {icon: 1});
+                        //下面为跳出iframe框架的页面跳转
+                        setTimeout("window.parent.location.reload();", 2000 )
+                    }else if (JSON.parse(base) == 'error_pwd'){
+                        layer.close(index);
+                        layer.msg('密码和确认密码不一致！', {icon: 2});
+                    } else if (JSON.parse(base) == 'exis_user'){
+                        layer.close(index);
+                        layer.msg('账号已经存在，请重新输入！', {icon: 2});
+                    } else {
+                        layer.close(index);
+                        layer.msg('系统错误，请联系系统管理员！', {icon: 2});
+                    }
+                }
+            })
+            return false;
+        })
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="../../static/admin/layui/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../static/admin/css/admin.css"/>
+</head>
+<body>
+<div class="layui-tab page-content-wrap">
+    <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">
+            <form class="layui-form"  style="width: 90%;padding-top: 20px;">
+                {% csrf_token %}
+                <div class="layui-form-item layui-hide">
+                    <label class="layui-form-label">ID：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="id" disabled autocomplete="off" class="layui-input" value={{id}}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">字典编码：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="csmc" disabled autocomplete="off" class="layui-input" value={{key}}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">字典名称：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="csms" disabled autocomplete="off" class="layui-input" value={{name}}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button id="cancel" type="button" class="layui-btn" lay-demo="close" style="margin-top: 40px">取消</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="../../static/js/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../static/js/jquery.cookie.js"></script>
+<script src="../../static/admin/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    $('#cancel').click(function () {
+        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+        parent.layer.close(index); //再执行关闭
+    })
+</script>
+</body>
+</html>

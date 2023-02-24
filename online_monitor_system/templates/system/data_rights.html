@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/admin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/css/chart.css" media="all">
+    <link rel="stylesheet" href="../../static/font-awesome-4.7.0/css/font-awesome.css">
+</head>
+<style>
+    .layui-table-grid-down {
+        display: none;
+    }
+    .clear{
+        position: absolute;
+        height: 36px;
+        margin-left: 80%;
+        width: 38px;
+        background-color: white;
+        border: none;
+        top: 1px
+    }
+</style>
+<body style="height: calc(100% - 10px);">
+{%csrf_token%}
+<div class="right_d1">
+    <div class="rights_d1_1">
+        <table class="layui-hide" id="user" lay-filter="user"></table>
+        <script type="text/html" id="toolbar">
+            <div class="layui-inline">
+                <button id="clearup" class="fa fa-times clear"></button>
+                <input class="layui-input" id="input" autocomplete="off" placeholder="姓名/账号">
+            </div>
+            <button class="layui-btn" id="search" data-type="reload">查询</button>
+        </script>
+    </div>
+    <div class="rights_d1_2">
+        <table class="layui-hide" id="user1" lay-filter="user1"></table>
+        <script type="text/html" id="toolbar1">
+            <div class="layui-inline">
+                <button id="clearup1" class="fa fa-times clear"></button>
+                <input class="layui-input" id="input1" autocomplete="off" placeholder="菜单名称">
+            </div>
+            <button class="layui-btn" id="search1" data-type="reload1">查询</button>
+        </script>
+        <script type="text/html" id="show">
+            {% verbatim %}
+            {{#  if(d.grant_code == '1'){ }}
+            {{#  if(d.shownumber == '1'){ }}
+            <input type="checkbox" name="show" checked='' value='{{d.id}}' lay-skin="switch" lay-filter="show" lay-text="开|关">
+            {{#  } }}
+            {{#  if(d.shownumber == '0'){ }}
+            <input type="checkbox" name="show" value='{{d.id}}' lay-skin="switch" lay-filter="show" lay-text="开|关">
+            {{#  } }}
+            {{#  if(d.shownumber == '2'){ }}
+            <input type="checkbox" name="show" disabled="" value='{{d.id}}' lay-skin="switch" lay-text="\">
+            {{#  } }}
+            {{#  } else { }}
+            {{#  if(d.shownumber == '1'){ }}
+            <input type="checkbox" name="show" disabled="" checked='' value='{{d.id}}' lay-skin="switch" lay-filter="show" lay-text="无|无">
+            {{#  } }}
+            {{#  if(d.shownumber == '0'){ }}
+            <input type="checkbox" name="show" disabled="" value='{{d.id}}' lay-skin="switch" lay-filter="show" lay-text="无|无">
+            {{#  } }}
+            {{#  if(d.shownumber == '2'){ }}
+            <input type="checkbox" name="show" disabled="" value='{{d.id}}' lay-skin="switch" lay-text="\">
+            {{#  } }}
+            {{#  } }}
+            {% endverbatim %}
+        </script>
+        <script type="text/html" id="see">
+            {% verbatim %}
+            {{#  if(d.grant_code == '1'){ }}
+            {{#  if(d.seenumber == '1'){ }}
+            <input type="checkbox" name="see" checked='' value='{{d.id}}' lay-skin="switch" lay-filter="see" lay-text="开|关">
+            {{#  } }}
+            {{#  if(d.seenumber == '0'){ }}
+            <input type="checkbox" name="see" value='{{d.id}}' lay-skin="switch" lay-filter="see" lay-text="开|关">
+            {{#  } }}
+            {{#  if(d.seenumber == '2'){ }}
+            <input type="checkbox" name="see" disabled="" value='{{d.id}}' lay-skin="switch" lay-text="\">
+            {{#  } }}
+            {{#  } else { }}
+            {{#  if(d.seenumber == '1'){ }}
+            <input type="checkbox" name="see" disabled="" checked='' value='{{d.id}}' lay-skin="switch" lay-filter="see" lay-text="无|无">
+            {{#  } }}
+            {{#  if(d.seenumber == '0'){ }}
+            <input type="checkbox" name="see" disabled="" value='{{d.id}}' lay-skin="switch" lay-filter="see" lay-text="无|无">
+            {{#  } }}
+            {{#  if(d.seenumber == '2'){ }}
+            <input type="checkbox" name="see" disabled="" value='{{d.id}}' lay-skin="switch" lay-text="\">
+            {{#  } }}
+            {{#  } }}
+            {% endverbatim %}
+        </script>
+        <script type="text/html" id="edit">
+            {% verbatim %}
+            {{#  if(d.grant_code == '1'){ }}
+            {{#  if(d.editnumber == '1'){ }}
+            <input type="checkbox" name="edit" checked='' value='{{d.id}}' lay-skin="switch" lay-filter="edit" lay-text="开|关">
+            {{#  } }}
+            {{#  if(d.editnumber == '0'){ }}
+            <input type="checkbox" name="edit" value='{{d.id}}' lay-skin="switch" lay-filter="edit" lay-text="开|关">
+            {{#  } }}
+            {{#  if(d.editnumber == '2'){ }}
+            <input type="checkbox" name="edit" disabled="" value='{{d.id}}' lay-skin="switch" lay-text="\">
+            {{#  } }}
+            {{#  } else { }}
+            {{#  if(d.editnumber == '1'){ }}
+            <input type="checkbox" name="edit" disabled="" checked='' value='{{d.id}}' lay-skin="switch" lay-filter="edit" lay-text="无|无">
+            {{#  } }}
+            {{#  if(d.editnumber == '0'){ }}
+            <input type="checkbox" name="edit" disabled="" value='{{d.id}}' lay-skin="switch" lay-filter="edit" lay-text="无|无">
+            {{#  } }}
+            {{#  if(d.editnumber == '2'){ }}
+            <input type="checkbox" name="edit" disabled="" value='{{d.id}}' lay-skin="switch" lay-text="\">
+            {{#  } }}
+            {{#  } }}
+            {% endverbatim %}
+        </script>
+        <script type="text/html" id="del">
+            {% verbatim %}
+            {{#  if(d.grant_code == '1'){ }}
+            {{#  if(d.delnumber == '1'){ }}
+            <input type="checkbox" name="del" checked='' value='{{d.id}}' lay-skin="switch" lay-filter="del" lay-text="开|关">
+            {{#  } }}
+            {{#  if(d.delnumber == '0'){ }}
+            <input type="checkbox" name="del" value='{{d.id}}' lay-skin="switch" lay-filter="del" lay-text="开|关">
+            {{#  } }}
+            {{#  if(d.delnumber == '2'){ }}
+            <input type="checkbox" name="del" disabled="" value='{{d.id}}' lay-skin="switch" lay-text="\">
+            {{#  } }}
+            {{#  } else { }}
+            {{#  if(d.delnumber == '1'){ }}
+            <input type="checkbox" name="del" disabled="" checked='' value='{{d.id}}' lay-skin="switch" lay-filter="del" lay-text="无|无">
+            {{#  } }}
+            {{#  if(d.delnumber == '0'){ }}
+            <input type="checkbox" name="del" disabled="" value='{{d.id}}' lay-skin="switch" lay-filter="del" lay-text="无|无">
+            {{#  } }}
+            {{#  if(d.delnumber == '2'){ }}
+            <input type="checkbox" name="del" disabled="" value='{{d.id}}' lay-skin="switch" lay-text="\">
+            {{#  } }}
+            {{#  } }}
+            {% endverbatim %}
+        </script>
+    </div>
+</div>
+
+</body>
+<script src="/static/layui/layui.js" charset="utf-8"></script>
+<script src="/static/js/jquery-3.3.1.min.js" charset="utf-8"></script>
+<script src="/static/js/jquery.cookie.js" charset="utf-8"></script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+        form = layui.form;
+        re_url = "{{url_data|safe}}";
+
+        table.render({
+            elem: '#user',
+            height: 'full-30',
+            toolbar: '#toolbar',
+            cellMinWidth: 110
+            , url: 'user_data.html'
+            , title: '用户数据表'
+            , where: {type:re_url}
+            , cols: [[
+                {checkbox: true, fixed: true, width: 80, align: 'center',}
+                , {field:'account', title:'账号', width:'20%',sort: true}
+                , {field: 'name', title: '用户名', width: '25%', align: 'center', sort: true,}
+                , {field: 'gender', title: '性别',width: 100,align: 'center', sort: true,}
+                , {field: 'org_name', title: '所在部门', align: 'center',}
+            ]]
+            , page: true
+            , id: 'Reload'
+            ,done:function (res,curr,count) {
+                counnumber = count
+            }
+        });
+        table.render({
+            elem: '#user1',
+            height: 'full-30'
+            ,toolbar: '#toolbar1'
+            ,cellMinWidth: 120
+            ,url:'/menu_grant.html'
+            ,title: '用户数据表'
+            ,where: {type:re_url}
+            ,cols: [[
+                {field: 'orderid', title: '序号', align: 'center', width: 120, sort: true}
+                , {field: 'caption', title: '菜单名称'}
+                , {field: 'shownumber', title: '数据展示', width: '17%', align: 'center', templet: '#show', unresize: true}
+                , {field: 'seenumber', title: '查看详情', width: '17%', align: 'center', templet: '#see', unresize: true}
+                , {field: 'editnumber', title: '编辑数据', width: '17%', align: 'center', templet: '#edit', unresize: true}
+                , {field: 'delnumber', title: '删除数据', width: '17%', align: 'center', templet: '#del', unresize: true}
+            ]]
+            ,page: true
+            ,id:'Reload1'
+        });
+        //监听工具条
+        var $ = layui.$, active = {
+            reload: function () {
+                var values = $("#input").val();
+                var index = layer.load(2, {shade: [0.2, '#5B5B5B']});
+                table.reload('Reload',
+                    {
+                        page:
+                            {
+                                curr: 1 //重新从第 1 页开始
+                            }
+                        , where: {keyword: values}//这里传参  向后台
+                    });
+                $("#input").attr("value", values);
+                layer.close(index);
+            },
+            reload1: function () {
+                var values = $("#input1").val();
+                var index = layer.load(2, {shade: [0.2, '#5B5B5B']});
+                table.reload('Reload1',
+                    {
+                        page:
+                            {
+                                curr: 1 //重新从第 1 页开始
+                            }
+                        , where: {keyword: values}//这里传参  向后台
+                    });
+                $("#input1").attr("value", values);
+                layer.close(index);
+            }
+        };
+        $('body').on('click', '#search', function () {
+            var type = 'reload';
+            active[type] ? active[type].call(this) : '';
+        });
+        $('body').on('click', '#search1', function () {
+            var type = 'reload1';
+            active[type] ? active[type].call(this) : '';
+        });
+        $('body').on('click','#clearup', function(){
+            $("#input").val("");
+            $('#input').attr('placeholder','姓名/账号');
+        });
+        $('body').on('click','#clearup1', function(){
+            $("#input1").val("");
+            $('#input1').attr('placeholder','菜单名称');
+        });
+        // table.on('tool(user)', function(obj){
+        //     var data = JSON.stringify(obj.data),
+        //         index = layer.load(2, {shade: [0.2, '#5B5B5B']});
+        //     console.log(data)
+        //     table.reload('Reload1',
+        //         {page:
+        //                 {
+        //                     curr: 1 //重新从第 1 页开始
+        //                 }
+        //             ,where: {keyword: 'obtain',base:data}//这里传参  向后台
+        //         });
+        //     layer.close(index);
+        // });
+        table.on('row(user)', function(obj) {
+            var data = JSON.stringify(obj.data),
+                checkStatus = table.checkStatus('Reload'),
+                checkdata = checkStatus.data,
+                index = layer.load(2, {shade: [0.2, '#5B5B5B']});
+            //设置表格变色
+            var data_index = $(this).attr('data-index');//得到当前的tr的index
+            for (var i = 0 ; i < counnumber; i++)//countNum为总行数
+            {
+                if (i % 2 == 0) { //设置隔行换色
+                    $(".layui-table-body tr[data-index=" + i + "]").attr({ "style": "color:black" });//恢复原有tr颜色
+                } else {
+                    $(".layui-table-body tr[data-index=" + i + "]").attr({ "style": "color:black" });//恢复原有tr颜色
+                }
+            }
+            $(".layui-table-body tr[data-index=" + data_index + "]").attr({ "style": "background:#00ffffc2" });//改变当前tr颜色
+            if(checkdata.length==0){
+                table.reload('Reload1',
+                    {page:
+                            {
+                                curr: 1 //重新从第 1 页开始
+                            }
+                        ,where: {keyword: 'obtain',base:data}//这里传参  向后台
+                    });
+
+            }else {
+                var type = 'reload1';
+                active[type] ? active[type].call(this) : '';
+            }
+            layer.close(index);
+        });
+        form.on('switch()', function (obj) {
+            var key=this.name;
+            state=obj.elem.checked, obj.othis;
+            checkStatus = table.checkStatus('Reload');
+            data = JSON.stringify(checkStatus.data);
+            menu_data = JSON.stringify(this.value)
+            index = layer.load(2, {shade: [0.2, '#5B5B5B']});
+            if(checkStatus.data.length>0){
+                $.ajax({
+                    url: 'data_rights.html',
+                    type: 'POST',
+                    data:{'key': key,'base':state,'user_data':data,'menu_state':menu_data,'type':re_url},
+                    headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+                    success: function (base) {
+                        if (base == 'true'){
+                            layer.msg('自动保存成功！', {icon: 1,time: 500,end:function () {
+                                    layer.close(index);
+                                }});
+                        }else {
+                            layer.msg('当前账号没有权限，请联系管理员！', {icon: 2,time: 500,end:function () {
+                                    layer.close(index);
+                                }});
+                        }
+                    }
+                })
+            } else{
+                layer.msg('请选择需要配置的用户！', {icon: 2});
+                var type = 'reload1';
+                active[type] ? active[type].call(this) : '';
+            }
+        });
+        document.onkeydown = function () {
+            if (window.event.keyCode == 13) {
+                $('#search').click()
+                $('#search1').click()
+            }
+        }
+    });
+</script>
+</body>
+</html>

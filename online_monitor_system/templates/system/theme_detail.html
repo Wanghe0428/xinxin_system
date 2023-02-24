@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>预览页面</title>
+    <link rel="stylesheet" href="/static/css/login.css"/>
+    <link rel="shortcut icon" href="../../static/images/favicon.ico" type="image/x-icon" />
+    {{cs | safe}}
+</head>
+<body style="margin:0 auto;" ;>
+<div class="d1" style="{{images}}">
+    {% csrf_token %}
+    {{canvas | safe}}
+    <div class="d2" style="background:{{background_color}};height:{{longin_height}};width:{{login_width}};top: {{move_window_down}};left: {{move_window_right}}">
+        {% csrf_token %}
+        <div class="a1 a2" style="left:{{move_inner_frame_right1}};top:{{move_inner_frame_down1}}">
+            <label for="account" class="a4" style="color:{{font_color}};font-size:{{font_size}}">账号</label>
+        </div>
+        <div style="position:absolute; z-index:2;left:{{move_inner_frame_right2}};top:{{move_inner_frame_down1}}">
+            <input id="account" disabled="" class="d3" style="width: {{inner_frame_width1}}">
+        </div>
+        <br>
+        <div class="a1 a3" style="left:{{move_inner_frame_right1}};top: {{move_inner_frame_down2}}">
+            <label for="pwd" class="a4" style="color:{{font_color}};font-size:{{font_size}}">密码</label>
+        </div>
+        <div style="position:absolute; z-index:2;left:{{move_inner_frame_right2}}; top:{{move_inner_frame_down2}}">
+            <input id="pwd" disabled="" class="d3" style="width: {{inner_frame_width1}}">
+        </div>
+        <br>
+        <div style="position:absolute; z-index:2;background-color: #30563bb8;left:{{move_inner_frame_right1}};top:{{move_inner_frame_down3}}">
+            <a><input type="submit" value="登录" class="d4" style="background-color: {{but_color}};color:{{font_color}};font-size:{{font_size}};width: {{inner_frame_width2}}"></a>
+        </div>
+        <div style="position:absolute; z-index:2; background-color: #30563bb8;left:{{move_inner_frame_right1}};top:{{move_inner_frame_down4}}">
+            <a><input type="submit" value="人脸识别" class="d4" style="background-color: {{but_color}};color:{{font_color}};font-size:{{font_size}};width: {{inner_frame_width2}}"></a>
+        </div>
+    </div>
+</div>
+<script src="../../static/js/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+{{js | safe}}
+<script>
+    $("body").click(function () {
+        // 关闭所有弹出层
+        parent.layer.closeAll();
+    })
+</script>
+</body>
+</html>

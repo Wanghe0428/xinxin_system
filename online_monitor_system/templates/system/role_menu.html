@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en"style="height: 100%;">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/admin/layui/css/layui.css" media="all">
+</head>
+<body style="height: 98%;">
+<div class="layui-btn-container" style="margin-left: 10px;margin-top: 10px">
+    <button type="button" class="layui-btn layui-btn-sm" lay-demo="setChecked">全选中</button>
+    <button type="button" class="layui-btn layui-btn-sm" lay-demo="reload">全不选</button>
+</div>
+<div style="height:calc(100% - 122px);border: 1px solid #a7a4a4;margin-left: 10px;margin-right: 10px;overflow:auto;">
+    <div id="edit" class="demo-tree-more"></div>
+</div>
+<button id="fix" type="button" class="layui-btn" lay-demo="getChecked" style="margin-top: 20px;margin-left: 30%;margin-bottom: 20px">提交</button>
+<button id="cancel" type="button" class="layui-btn" lay-demo="close" style="margin-top: 20px;margin-left: 15%;margin-bottom: 20px">取消</button>
+</body>
+</html>
+
+<script src="/static/admin/js/layui.js" charset="utf-8"></script>
+<script src="/static/js/jquery-3.3.1.min.js" charset="utf-8"></script>
+<script src="/static/js/jquery.cookie.js" charset="utf-8"></script>
+<script>
+    layui.use(['tree', 'util'], function() {
+        var tree = layui.tree
+            ,layer = layui.layer
+            ,util = layui.util
+            ,re_url = "{{url_data|safe}}";
+
+        //权限设置
+        tree.render({
+            elem: '#edit'
+            , data: {{ data | safe }}
+            , showCheckbox: true  //是否显示复选框
+            , id: 'rele_Id'
+            });
+
+        //按钮事件
+        util.event('lay-demo', {
+            getChecked: function (othis) {
+                var id_list = []
+                var checkedData = tree.getChecked('rele_Id'); //获取选中节点的数据
+                for (var r in checkedData){
+                    id_list.push(checkedData[r]['id'])
+                    for (var c in checkedData[r]['children']){
+                        id_list.push(checkedData[r]['children'][c]['id'])
+                    }
+                }
+                var index = layer.load(2, {shade: [0.2, '#5B5B5B']});
+                var ro_base = {{ ro_base | safe }}
+                $.ajax({
+                    url: 'role_menu.html',
+                    type: 'POST',
+                    data:{'key': JSON.stringify(ro_base),'base':JSON.stringify(id_list),'type':re_url},
+                    headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+                    success:function (base) {
+                        if (base == 'true'){
+                            layer.msg('菜单配置成功，请稍后重新登录！', {icon: 1});
+                            //下面为跳出iframe框架的页面跳转
+                            setTimeout("window.parent.location.reload();", 2000 )
+                        }else {
+                            layer.close(index);
+                            layer.msg('菜单配置失败，请联系系统管理员！', {icon: 2});
+                        }
+                    }
+                })
+            }
+            ,setChecked: function(){
+                tree.setChecked('rele_Id', {{ role_id | safe }}); //勾选指定节点
+            }
+            ,reload: function(){
+                //重载实例
+                tree.reload('rele_Id', {
+
+                });
+            }
+            , close: function () {
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);//关闭当前页
+            }
+        });
+    })
+</script>

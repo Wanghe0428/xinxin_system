@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="../../static/admin/layui/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../static/admin/css/admin.css"/>
+</head>
+<body>
+<div class="layui-tab page-content-wrap">
+    <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">
+            <form class="layui-form"  style="width: 90%;padding-top: 20px;">
+                {% csrf_token %}
+                <div class="layui-form-item layui-hide">
+                    <label class="layui-form-label">父级ID：</label>
+                    <div class="layui-input-block">
+                        <input type="PID" name="PID" lay-verify="level" disabled autocomplete="off" class="layui-input" value={{ org_id }}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">父级名称：</label>
+                    <div class="layui-input-block">
+                        <input type="P_name" name="P_name" placeholder="父级名称" lay-verify="level" disabled autocomplete="off" class="layui-input" value={{ org_name }}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">部门编号：</label>
+                    <div class="layui-input-block">
+                        <input type="Code" name="Code" placeholder="部门编号" lay-verify="Code" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">部门名称：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" placeholder="部门名称"  lay-verify="username"  autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">备注：</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入内容" name="remark" lay-verify="remark" class="layui-textarea" style="min-height: 300px">{{role_base.3}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="adminInfo" style="margin-top: 30px">立即提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="../../static/admin/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../static/js/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/js/jquery.cookie.js" ></script>
+<script>
+    layui.use(['form','element'], function() {
+        var form = layui.form();
+        re_url = "{{url_data|safe}}";
+
+        form.verify({
+            remark: function(value){
+                if(value.length < 1){
+                    return '备注不能为空！';
+                }else if (value.length > 128){
+                    return '备注内容长度不能超过128个字符！';
+                }
+            }
+            ,username: function(value){
+                if(value.length < 1){
+                    return '部门名称不能为空！';
+                }
+            }
+            ,Code: function(value){
+                if(value.length < 1){
+                    return '部门编号不能为空！';
+                }
+            }
+        });
+        form.on('submit(adminInfo)', function(data){
+            var index = layer.load(2, {shade: [0.2, '#5B5B5B']});
+            $.ajax({
+                url: 'org_add.html',
+                type: 'POST',
+                data:{'key': '新增部门','base':data.field,'type':re_url},
+                headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+                success: function (base) {
+                    if (base == 'true'){
+                        layer.msg('添加部门成功！', {icon: 1});
+                        //下面为跳出iframe框架的页面跳转
+                        setTimeout("window.parent.location.reload();", 2000 )
+                    }else if(base == 'false'){
+                        layer.close(index);
+                        layer.msg('部门代码不能重复！', {icon: 2});
+                    }else if(base == 'null'){
+                        layer.close(index);
+                        layer.msg('警告！！当前属于非法操作！', {icon: 3});
+                    }
+                    else {
+                        layer.close(index);
+                        layer.msg('添加部门失败 ，请联系系统管理员！', {icon: 2});
+                    }
+                }
+            })
+            return false;
+        })
+    })
+</script>

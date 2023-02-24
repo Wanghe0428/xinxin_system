@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>后台管理系统</title>
+    <link rel="stylesheet" type="text/css" href="../../static/admin/layui/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../static/admin/css/admin.css"/>
+    <link rel="stylesheet" href="../../static/font-awesome-4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="../../static/images/favicon.ico" type="image/x-icon" />
+    <style>
+        .type{
+            color: black;
+        }
+        .icon-num{
+            position: absolute;
+            color: white;
+            margin-top: 10px;
+            margin-left: 35px;
+            font-size: 0.1px;
+            border-radius:50%;
+            border: 1px solid red;
+            background-color: red;
+            min-width: 13px;
+            text-align: center;
+        }
+        .font{
+            position: absolute;
+            color: black;
+            top: 11px;
+            left: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="main-layout" id='main-layout'>
+    <!--侧边栏-->
+    {% csrf_token %}
+    <div class="main-layout-side">
+        <div class="m-logo">{{sys_name}}</div>
+        <ul class="layui-nav layui-nav-tree" lay-filter="leftNav" style="height:calc(100% - 90px);">
+            <li class="layui-nav-item ">
+                <a href="javascript:;" style="color: #ffffff9c;font-size: 15px;"><i class="fa fa-location-arrow pad" aria-hidden="true"></i>导 航 菜 单</a>
+            </li>
+            {{ m_list | safe }}
+        </ul>
+        <div style="margin-bottom: 0px;color: #ffffff9c;height: 30px;margin-left: 20px;">系统版本号：{{version}}</div>
+    </div>
+    <!--右侧内容-->
+    <div class="main-layout-container">
+        <!--头部-->
+        <div class="main-layout-header">
+            <div class="menu-btn" id="hideBtn">
+                <a href="javascript:;">
+                    <span class="iconfont">&#xe60e;</span>
+                </a>
+            </div>
+            <ul class="layui-nav" lay-filter="rightNav">
+                <i class="icon-num" >{{count}}</i>
+                <li class="layui-nav-item"><a id="information" href="javascript:;" data-id='a5' data-text="邮件系统">
+                    <i class="layui-icon layui-icon-notice" style="font-size: 22px; color:#222d32;"></i>
+                </a></li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><p class="type"><img src='{{user_image}}' class="layui-nav-img">{{username}}</p></a>
+                    <dl class="layui-nav-child">
+                        <dd><div class="fa fa-caret-right font" style=""></div><a id="switch_org" style="text-align: center;">切换机构</a></dd>
+                        <dd><div class="fa fa-caret-right font" style=""></div><a id="personal" style="text-align: center;">个人资料</a></dd>
+                        <dd><div class="fa fa-caret-right font" style=""></div><a id="pwd_edit" style="text-align: center;">修改密码</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="/login.html" style="color: black">退出</a></li>
+            </ul>
+        </div>
+        <!--主体内容-->
+        <div class="main-layout-body">
+            <!--tab 切换-->
+            <div class="layui-tab layui-tab-brief main-layout-tab" lay-filter="tab" lay-allowClose="true">
+                <ul class="layui-tab-title">
+                    <li class="layui-this welcome"><i class="fa fa-home pad"></i>系统首页</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show" style="background: #f5f5f5;">
+                        <iframe src="home.html" width="100%" height="100%" name="iframe" scrolling="auto" class="iframe" framborder="0">
+                            <div id="earth"></div>
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--遮罩-->
+    <div class="main-mask">
+    </div>
+</div>
+<script src="../../static/admin/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../static/admin/js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../static/admin/js/main.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../static/js/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../static/js/jquery.cookie.js"></script>
+</body>
+</html>
+<script>
+    $('.layui-nav-item').click(function () {
+        $(this).siblings().removeClass('layui-nav-itemed')
+    })
+</script>
+<script>
+    $('#switch_org').click(function () {
+        layer.open({
+            type: 2 //Page层类型
+            ,area: ['450px', '300px']
+            ,title: '编辑个人信息'
+            ,shade: 0.6 //遮罩透明度
+            ,anim: 4 //0-6的动画形式，-1不开启
+            ,content:['change_org.html/']
+        });
+    })
+    $('#personal').click(function () {
+        layer.open({
+            type: 2 //Page层类型
+            ,area: ['700px', '600px']
+            ,title: '编辑个人信息'
+            ,shade: 0.6 //遮罩透明度
+            ,anim: 4 //0-6的动画形式，-1不开启
+            ,content:['single.html/'] + "?user_id=" + "{{user_id}}"
+        });
+    })
+    $('#pwd_edit').click(function () {
+        layer.open({
+            type: 2 //Page层类型
+            ,area: ['500px', '400px']
+            ,title: '密码修改'
+            ,shade: 0.6 //遮罩透明度
+            ,anim: 4 //0-6的动画形式，-1不开启
+            ,content:['pwd_edit.html/'] + "?user_id=" + "{{user_id}}"
+        });
+    });
+    $('#information').click(function () {
+        layer.open({
+            type: 2 //Page层类型
+            ,area: ['50%', '70%']
+            ,title: '消息中心'
+            ,btn:['删除已读','全标已读']
+            ,shade: 0.6 //遮罩透明度
+            ,anim: 4 //0-6的动画形式，-1不开启
+            ,content:'information.html'
+            ,scrollbar: false,
+            yes:function(index,layero){
+                layer.confirm('你确定要删除当前数据？', {
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    $.ajax({
+                        url: 'information_batch_del',
+                        type: 'POST',
+                        data:{'key': 'information_batch_del'},
+                        headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+                        success: function (base) {
+                            if (base == 'true'){
+                                layer.msg('删除已读信息成功！', {icon: 1});
+                                setTimeout("window.location.reload();", 2000 )
+                            }else if(base == 'false'){
+                                layer.msg('没有任何已读信息！', {icon: 2});
+                            } else {
+                                layer.msg('删除已读信息失败，请联系管理员！', {icon: 2});
+                            }
+                        }
+                    })
+                });
+                return false;
+            },
+            btn2:function(index,layero){
+                    $.ajax({
+                        url: 'information_batch_read',
+                        type: 'POST',
+                        data:{'key': 'information_batch_read'},
+                        headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+                        success: function (base) {
+                            if (base == 'true'){
+                                layer.msg('操作成功！', {icon: 1});
+                                setTimeout("window.location.reload();", 2000 )
+                            }else if(base == 'false'){
+                                layer.msg('没有任何未读信息！', {icon: 2});
+                            }else {
+                                layer.msg('删除角色失败，请联系管理员！', {icon: 2});
+                            }
+                        }
+                    })
+                return false;
+            }
+        });
+    })
+</script>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>窗口设置</title>
+    <link rel="stylesheet" href="/static/css/login.css"/>
+    <link rel="stylesheet" href="/static/layui/css/layui.css"/>
+    <link rel="shortcut icon" href="../../static/images/favicon.ico" type="image/x-icon" />
+    {{cs | safe}}
+</head>
+<style>
+    .ad1{
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        display: block;
+        box-sizing: border-box;
+        overflow-x: hidden;
+        z-index: 2;
+        margin: 0;
+        position: absolute;
+        -moz-background-size:100% 100%;
+        background-size:100% 100%
+    }
+    .ad2{
+        padding:0 15px;
+        min-width:45px;
+        /*background-color: #1aa094;*/
+        height: 25px;
+        width: 40%;
+    }
+    .ad3{
+        padding:0 15px;
+        min-width: 100px;
+        height: 25px;
+    }
+    .move{
+        margin-left: 30%;
+    }
+    .des_width{
+        padding:0 0px;
+        min-width:45px;
+        height: 25px;
+        width: 40%;
+        background-color: #32d5dc5e;
+        color: white;
+    }
+</style>
+<body style="margin:0 auto;">
+<div class="ad1" style="{{images}};">
+    {% csrf_token %}
+    {{canvas | safe}}
+    <div class="d2" style="background:{{background_color}};height:{{longin_height1}};width:{{login_width1}};top: {{move_window_down1}};left: {{move_window_right1}}">
+        {% csrf_token %}
+        <div class="a1 a2" style="left:{{move_inner_frame_right1}};top:{{move_inner_frame_down1}}">
+            <label for="account" class="a4" style="color:{{font_color}};font-size:{{font_size1}};">账号</label>
+        </div>
+        <div style="position:absolute; z-index:2; left:{{move_inner_frame_right2}};top:{{move_inner_frame_down1}}">
+            <input id="account" disabled="" class="d3" style="width: {{inner_frame_width1}}">
+        </div>
+        <br>
+        <div class="a1 a3" style="left:{{move_inner_frame_right1}};top: {{move_inner_frame_down2}}">
+            <label for="pwd" class="a4" style="color:{{font_color}};font-size:{{font_size1}};">密码</label>
+        </div>
+        <div style="position:absolute; z-index:2; left:{{move_inner_frame_right2}}; top:{{move_inner_frame_down2}}">
+            <input id="pwd" disabled="" class="d3" style="width: {{inner_frame_width1}}">
+        </div>
+        <br>
+        <div style="position:absolute; z-index:2;background-color: #30563bb8;left:{{move_inner_frame_right1}};top:{{move_inner_frame_down3}}">
+            <a><input type="submit" value="登录" class="d4" style="background-color: {{but_color}};color:{{font_color}};font-size:{{font_size1}};width: {{inner_frame_width2}}"></a>
+        </div>
+        <div style="position:absolute; z-index:2;background-color: #30563bb8;left:{{move_inner_frame_right1}};top:{{move_inner_frame_down4}}">
+            <a><input type="submit" value="人脸识别" class="d4" style="background-color: {{but_color}};color:{{font_color}};font-size:{{font_size1}};width: {{inner_frame_width2}}"></a>
+        </div>
+    </div>
+</div>
+<div id="box" style="background-color: #768cb8;position: fixed;z-index: 10;min-width: 300px;">
+    {% csrf_token %}
+    <div style="background-color: #00a0e9;padding: 10px 10px;">窗口设置(可拖拽)</div>
+    <div class="layui-form" style="padding:10px;overflow-y: scroll;height: 320px;">
+        <div class="layui-form-item">
+            <label class="layui-form-label ad3">字体大小(px)</label>
+            <div>
+                <input name="font" lay-verify="font|number" class="layui-btn layui-btn-primary des_width" value="{{font_size}}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label ad3">外框宽度(px)</label>
+            <div>
+                <input name="wk_kd" lay-verify="wk_kd|number" class="layui-btn layui-btn-primary des_width" value="{{login_width}}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label ad3">外框高度(px)</label>
+            <div>
+                <input name="wk_gd" lay-verify="wk_gd|number" class="layui-btn layui-btn-primary des_width" value="{{longin_height}}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label ad3">窗口右移(%)</label>
+            <div>
+                <input name="ck_yy" lay-verify="ck_yy|number" class="layui-btn layui-btn-primary des_width" value="{{move_window_right}}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label ad3">窗口下移(%)</label>
+            <div>
+                <input name="ck_xy" lay-verify="ck_xy|number" class="layui-btn layui-btn-primary des_width" value="{{move_window_down}}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label ad3">内框宽度(px)</label>
+            <div>
+                <input name="nk_kd" lay-verify="nk_kd|number" class="layui-btn layui-btn-primary des_width" value="{{inner_frame_width}}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label ad3">内框右移(%)</label>
+            <div>
+                <input name="nk_yy" lay-verify="nk_yy|number" class="layui-btn layui-btn-primary des_width" value="{{move_inner_frame_right}}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label ad3">内框下移(%)</label>
+            <div>
+                <input name="nk_xy" lay-verify="nk_xy|number" class="layui-btn layui-btn-primary des_width" value="{{move_inner_frame_down}}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label ad3">字体颜色</label>
+            <div>
+                <input id="font_color" lay-verify="font_color" type="hidden" name="font_color" value="{{font_color}}">
+                <span id="font_color1" class="layui-btn layui-btn-primary test-select-color ad2" style="background-color: {{font_color}}"></span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label ad3">背景颜色</label>
+            <div>
+                <input id="bj_color" type="hidden" name="bj_color" value="{{background_color}}">
+                <span id="bj_color1" class="layui-btn layui-btn-primary test-select-color ad2" style="background-color: {{background_color}}"></span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label ad3">按钮颜色</label>
+            <div>
+                <input id="an_color" type="hidden" name="an_color" value="{{but_color}}">
+                <span id="an_color1" class="layui-btn layui-btn-primary test-select-color ad2" style="background-color: {{but_color}}"></span>
+            </div>
+        </div>
+        <button id="reset" class="layui-btn layui-btn-sm move">重置</button>
+        <button class="layui-btn layui-btn-sm move" lay-submit lay-filter="complete">应用</button>
+    </div>
+</div>
+</body>
+</html>
+
+<script src="../../static/layui/layui.js" charset="utf-8"></script>
+<script src="../../static/js/jquery-3.3.1.min.js" charset="utf-8"></script>
+<script src="../../static/js/paigusu.min.js" charset="utf-8"></script>
+<script src="../../static/js/jquery.cookie.js" ></script>
+{{js | safe}}
+<script>
+    layui.use('form', function() {
+        var form = layui.form
+            , layer = layui.layer
+        re_url = "{{url_data|safe}}";
+        re_id = "{{re_id|safe}}";
+
+        $('#reset').click(function () {
+            layer.load(2, {shade: [0.2, '#5B5B5B']});
+            layer.msg('刷新成功！', {icon: 1});
+            setTimeout("window.location.reload();", 1300 )
+        })
+
+        form.verify({
+            font: function(value){
+                if(value.length < 1){
+                    return '请填写字体大小';
+                }else if (value > 100){
+                    return '字体大小内容不能大于100';
+                }
+                else if (value < 10){
+                    return '字体大小内容必须大于10';
+                }
+            },
+            wk_kd: function(value){
+                if(value.length < 1){
+                    return '请填写外框宽度';
+                }else if (value < 300){
+                    return '外框宽度不能小于400';
+                }
+                else if (value > 800){
+                    return '外框宽度不能大于800';
+                }
+            },
+            wk_gd: function(value){
+                if(value.length < 1){
+                    return '请填写外框高度';
+                }else if (value < 300){
+                    return '外框高度不能小于100';
+                }
+                else if (value > 800){
+                    return '外框高度不能大于800';
+                }
+            },
+            ck_yy: function(value){
+                if(value.length < 1){
+                    return '请填写窗口右移百分比';
+                }else if (value > 90){
+                    return '窗口右移百分比不能大于90%';
+                }
+                else if (value < 10){
+                    return '窗口右移百分比不能小于10%';
+                }
+            },
+            ck_xy: function(value){
+                if(value.length < 1){
+                    return '请填写窗口下移';
+                }else if (value > 90){
+                    return '窗口下移百分比不能大于90%';
+                }
+                else if (value < 10){
+                    return '窗口下移百分比不能小于10%';
+                }
+            },
+        });
+        form.on('submit(complete)', function(data){
+            var index = layer.load(2, {shade: [0.2, '#5B5B5B']});
+
+            $.ajax({
+                url: 'design_submit',
+                type: 'POST',
+                data:{'key': 'design_submit','base':data.field,'type':re_url,'re_id':re_id},
+                headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+                success: function (base) {
+                    if (base == 'true'){
+                        layer.msg('操作成功！', {icon: 1});
+                        setTimeout("window.location.reload();", 1300 )
+                    }else if(base == 'false'){
+                        layer.msg('你无权进行此操作！', {icon: 1});
+                        setTimeout("window.location.reload();", 1300 )
+                    }else if(base == ''){
+                        layer.msg('非法操作，即将退出系统！', {icon: 1});
+                        setTimeout("window.location.reload();", 1300 )
+                    } else {
+                        layer.close(index);
+                        layer.msg('系统错误，请联系系统管理员！', {icon: 2});
+                        // setTimeout("window.location.reload();", 1300 )
+                    }
+                }
+            })
+            return false;
+        });
+    });
+</script>
+<script>
+    $(function () {
+        $('#font_color1').paigusu({
+            color: '#1aa094',//初始色  支持两种配置方案
+        }, function (event, obj) {
+            $(event).css('background-color', '#' + obj.hex);
+            $('#font_color').val('#' + obj.hex);
+        });
+    });
+    $(function () {
+        $('#bj_color1').paigusu({
+            color: '#1aa094',//初始色  支持两种配置方案
+        }, function (event, obj) {
+            $(event).css('background-color', '#' + obj.hex);
+            $('#bj_color').val('#' + obj.hex);
+        });
+    });
+    $(function () {
+        $('#an_color1').paigusu({
+            color: '#1aa094',//初始色  支持两种配置方案
+        }, function (event, obj) {
+            $(event).css('background-color', '#' + obj.hex);
+            $('#an_color').val('#' + obj.hex);
+        });
+    });
+</script>
+<script>
+    const oDiv = document.getElementById('box');
+
+    function limitDrag(node) {
+        node.onmousedown = function (ev) {
+            let e = ev || window.event;
+
+            // 获取鼠标到 node 左上角的相对位置
+            let offSetX = e.clientX - node.offsetLeft;
+            let offSetY = e.clientY - node.offsetTop;
+
+            document.onmousemove = function (ev) {
+                let e = ev || window.event;
+
+                // 鼠标移动时，计算 node 左上角应该在的位置
+                let x = e.clientX - offSetX;
+                let y = e.clientY - offSetY;
+                // 限制出界
+                // 获取当前窗口的宽高
+                let Width = document.documentElement.clientWidth || document.body.clientWidth;
+                let Height = document.documentElement.clientHeight || document.body.clientHeight;
+
+                if (x <= 0) {
+                    x = 0;
+                }
+                if (x >= Width - node.offsetWidth) {
+                    x = Width - node.offsetWidth
+                }
+                if (y <= 0) {
+                    y = 0;
+                }
+                if (y >= Height - node.offsetHeight) {
+                    y = Height - node.offsetHeight
+                }
+                node.style.left = x + 'px';
+                node.style.top = y + 'px';
+            }
+        }
+        document.onmouseup = function () {
+            document.onmousemove = null;
+        }
+    }
+    limitDrag(oDiv);
+</script>

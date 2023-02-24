@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录页面</title>
+    <link rel="stylesheet" href="/static/css/login.css"/>
+    <link rel="shortcut icon" href="../../static/images/favicon.ico" type="image/x-icon" />
+    {{cs | safe}}
+</head>
+<body style="margin:0 auto;" ;>
+<div class="d1" style="{{images}}">
+    {% csrf_token %}
+    {{canvas | safe}}
+    <div class="d2" style="background:{{background_color}};height:{{longin_height}};width:{{login_width}};top: {{move_window_down}};left: {{move_window_right}}">
+        {% csrf_token %}
+        <div class="a1 a2" style="left:{{move_inner_frame_right1}};top:{{move_inner_frame_down1}}">
+            <label for="account" class="a4" style="color:{{font_color}};font-size:{{font_size}}">账号</label>
+        </div>
+        <div style="position:absolute; z-index:2;left:{{move_inner_frame_right2}};top:{{move_inner_frame_down1}}">
+            <input id="account" name="user" type="text" class="d3" style="width: {{inner_frame_width1}}">
+        </div>
+        <br>
+        <div class="a1 a3" style="left:{{move_inner_frame_right1}};top: {{move_inner_frame_down2}}">
+            <label for="pwd" class="a4" style="color:{{font_color}};font-size:{{font_size}}">密码</label>
+        </div>
+        <div style="position:absolute; z-index:2;left:{{move_inner_frame_right2}}; top:{{move_inner_frame_down2}}">
+            <input id="pwd" name="pwd" type="password" class="d3" style="width: {{inner_frame_width1}}">
+        </div>
+        <br>
+        <div style="position:absolute; z-index:2;background-color: #30563bb8;left:{{move_inner_frame_right1}};top:{{move_inner_frame_down3}}">
+            <a><input id="login" type="submit" value="登录" class="d4" style="background-color: {{but_color}};color:{{font_color}};font-size:{{font_size}};width: {{inner_frame_width2}}"></a>
+        </div>
+    </div>
+</div>
+<script src="../../static/js/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../static/admin/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/js/jquery.cookie.js" ></script>
+<script src="/static/layui/common.js" ></script>
+{{js | safe}}
+<script>
+    layui.use('layer', function() {
+        $("#login").click(function () {
+            var index = layer.load(2, {shade: [0.2, '#5B5B5B']});
+            $.ajax({
+                url: 'login.html',
+                type: 'POST',
+                data:{'key': 'login','account':$('#account').val(),'password':$('#pwd').val()},
+                headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+                success: function (base) {
+                    if (base == 'true'){
+                        layer.msg('登录成功！', {icon: 1,time: 1000,end:function () {
+                                window.location.href = '/index.html';
+                            }});
+                    }else if(base == JSON.stringify('stop')){
+                        layer.msg('登录账号已停用！！', {icon: 2,time: 1000,end:function () {
+                                window.location.href = '/index.html';
+                            }});
+                    }
+                    else if(base == 'false'){
+                        layer.msg('账号或密码错误！', {icon: 2,time: 1000,end:function () {
+                                window.location.href = '/index.html';
+                            }});
+                    } else {
+                        layer.msg('请填写账号或密码！', {icon: 0,time: 1000,end:function () {
+                                // window.location.href = '/index.html';
+                                layer.close(index);
+                            }});
+                    }
+                }
+            })
+        });
+
+    });
+    document.onkeydown = function(){
+        if(window.event.keyCode == 13){
+            $('#login').click()
+        }
+    }
+</script>
+<script language="JavaScript">
+    if (window != top)
+        top.location.href = location.href;
+</script>
+</body>
+</html>

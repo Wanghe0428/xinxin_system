@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="../../static/admin/layui/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../static/admin/css/admin.css"/>
+</head>
+<body>
+<div class="layui-tab page-content-wrap">
+    <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">
+            <form class="layui-form"  style="width: 90%;padding-top: 20px;">
+                {% csrf_token %}
+                <div class="layui-form-item layui-hide">
+                    <label class="layui-form-label">菜单ID：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="menu_id"  lay-verify="required|username" disabled autocomplete="off" class="layui-input" value={{ data.id }}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">父节点：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="P_name" disabled autocomplete="off" class="layui-input" value={{ p_name }}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">菜单名称：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="p_name" disabled disabledautocomplete="off" class="layui-input" value={{ data.caption }}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">菜单图标：</label>
+                    <div class="layui-input-block">
+                        <input type="level" name="font" disabled autocomplete="off" class="layui-input white-space" value="{{ data.lcon }}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">菜单链接：</label>
+                    <div class="layui-input-block">
+                        <input type="level" name="link" disabled autocomplete="off" class="layui-input" value={{ data.url }}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序号：</label>
+                    <div class="layui-input-block">
+                        <input type="level" name="order" disabled autocomplete="order" class="layui-input" value={{ data.order }}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">是否显示</label>
+                    <div class="layui-input-block">
+                        <input id="orgProblemStatus" type="checkbox" disabled lay-skin="primary" title="数据展示">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">拥有权限</label>
+                    <div class="layui-input-block">
+                        <input id="show" type="checkbox" disabled lay-skin="primary" title="数据展示">
+                        <input id="see" type="checkbox" disabled lay-skin="primary" title="查看详情">
+                        <input id="edit" type="checkbox" disabled lay-skin="primary" title="编辑数据">
+                        <input id="del" type="checkbox" disabled lay-skin="primary" title="删除数据">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">备注：</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入内容" name="remark" disabled class="layui-textarea" style="min-height: 200px">{{ data.remark }}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button id="cancel" type="button" class="layui-btn" lay-demo="close" style="margin-top: 20px">取消</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="../../static/js/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/admin/js/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form','element'], function() {
+    })
+</script>
+<script>
+    var base = {{data|safe}}
+    if (base.display=='1'){
+        $("#orgProblemStatus").attr('checked','');
+    }
+    if (base.show=='1'){
+        $("#show").attr('checked','');
+    }
+    if (base.see=='1'){
+        $("#see").attr('checked','');
+    }
+    if (base.edit=='1'){
+        $("#edit").attr('checked','');
+    }
+    if (base.del=='1'){
+        $("#del").attr('checked','');
+    }
+</script>
+<script>
+    $('#cancel').click(function () {
+        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+        parent.layer.close(index); //再执行关闭
+    })
+</script>

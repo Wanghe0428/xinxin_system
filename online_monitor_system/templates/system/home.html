@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body style="height:calc(100% - 8px);">
+<div style="height: 50%;width: 100%;">
+    <div id="map1" class="layui-tab-item layui-show" style="float: right;width:calc(50% - 2px);height:calc(100% - 6px);border: 1px solid gray;"></div>
+    <div id="map2" class="layui-tab-item layui-show" style="float: left;width:calc(50% - 2px);height:calc(100% - 6px);border: 1px solid gray;"></div>
+</div>
+<div style="height: 50%;width: 100%;">
+    <div id="map3" class="layui-tab-item layui-show" style="float: right;width:calc(50% - 2px);height:calc(100% - 6px);border: 1px solid gray;"></div>
+    <div id="map4" class="layui-tab-item layui-show" style="float: left;width:calc(50% - 2px);height:calc(100% - 6px);border: 1px solid gray;"></div>
+</div>
+</body>
+</html>
+<script src="../../static/echarts/echarts.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    // 柱状图
+    var chartDom = document.getElementById('map2');
+    var myChart = echarts.init(chartDom);
+    var option;
+
+    option = {
+        backgroundColor: '#0f375f',
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [
+            {
+                type: 'category',
+                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                axisTick: {
+                    alignWithLabel: true
+                }
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value'
+            }
+        ],
+        series: [
+            {
+                name: 'Direct',
+                type: 'bar',
+                barWidth: '60%',
+                data: [10, 52, 200, 334, 390, 330, 220]
+            }
+        ]
+    };
+
+    option && myChart.setOption(option);
+
+</script>
+<script>
+    // 象形柱图
+    var chartDom = document.getElementById('map1');
+    var myChart = echarts.init(chartDom);
+    var option;
+
+    // Generate data
+    let category = [];
+    let dottedBase = +new Date();
+    let lineData = [];
+    let barData = [];
+    for (let i = 0; i < 20; i++) {
+        let date = new Date((dottedBase += 3600 * 24 * 1000));
+        category.push(
+            [date.getFullYear(), date.getMonth() + 1, date.getDate()].join('-')
+        );
+        let b = Math.random() * 200;
+        let d = Math.random() * 200;
+        barData.push(b);
+        lineData.push(d + b);
+    }
+    // option
+    option = {
+        backgroundColor: '#0f375f',
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        legend: {
+            data: ['line1', 'bar1'],
+            textStyle: {
+                color: '#ccc'
+            }
+        },
+        xAxis: {
+            data: category,
+            axisLine: {
+                lineStyle: {
+                    color: '#ccc'
+                }
+            }
+        },
+        yAxis: {
+            splitLine: { show: false },
+            axisLine: {
+                lineStyle: {
+                    color: '#ccc'
+                }
+            }
+        },
+        series: [
+            {
+                name: 'line1',
+                type: 'line',
+                smooth: true,
+                showAllSymbol: true,
+                symbol: 'emptyCircle',
+                symbolSize: 15,
+                data: lineData
+            },
+            {
+                name: 'bar1',
+                type: 'bar',
+                barWidth: 10,
+                itemStyle: {
+                    borderRadius: 5,
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                        { offset: 0, color: '#14c8d4' },
+                        { offset: 1, color: '#43eec6' }
+                    ])
+                },
+                data: barData
+            },
+        ]
+    };
+
+    option && myChart.setOption(option);
+
+</script>
+<script>
+    var chartDom = document.getElementById('map3');
+    var myChart = echarts.init(chartDom);
+    var option;
+
+    const data = [];
+    for (let i = 0; i < 5; ++i) {
+        data.push(Math.round(Math.random() * 200));
+    }
+    option = {
+        backgroundColor: '#0f375f',
+        xAxis: {
+            max: 'dataMax'
+        },
+        yAxis: {
+            type: 'category',
+            data: ['A', 'B', 'C', 'D', 'E'],
+            inverse: true,
+            animationDuration: 300,
+            animationDurationUpdate: 300,
+            max: 2 // only the largest 3 bars will be displayed
+        },
+        series: [
+            {
+                realtimeSort: true,
+                name: 'X',
+                type: 'bar',
+                data: data,
+                label: {
+                    show: true,
+                    position: 'right',
+                    valueAnimation: true
+                }
+            }
+        ],
+        legend: {
+            show: true
+        },
+        animationDuration: 0,
+        animationDurationUpdate: 3000,
+        animationEasing: 'linear',
+        animationEasingUpdate: 'linear'
+    };
+    function run() {
+        for (var i = 0; i < data.length; ++i) {
+            if (Math.random() > 0.9) {
+                data[i] += Math.round(Math.random() * 2000);
+            } else {
+                data[i] += Math.round(Math.random() * 200);
+            }
+        }
+        myChart.setOption({
+            series: [
+                {
+                    type: 'bar',
+                    data
+                }
+            ]
+        });
+    }
+    setTimeout(function () {
+        run();
+    }, 0);
+    setInterval(function () {
+        run();
+    }, 3000);
+
+    option && myChart.setOption(option);
+
+</script>
+<script>
+    var chartDom = document.getElementById('map4');
+    var myChart = echarts.init(chartDom);
+    var option;
+
+    option = {
+        backgroundColor: '#0f375f',
+        xAxis: {
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                data: [820, 932, 901, 934, 1290, 1330, 1320],
+                type: 'line',
+                smooth: true
+            }
+        ]
+    };
+
+    option && myChart.setOption(option);
+
+</script>

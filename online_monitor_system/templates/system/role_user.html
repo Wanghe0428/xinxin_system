@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../static/layui/css/layui.css" media="all">
+    <style>
+        html,
+        body {
+            height: 98%;
+            margin: 0;
+            padding: 0;
+        }
+        .wrap {
+            height: 100%;
+        }
+    </style>
+</head>
+<body style="height:100%;width:99%;">
+<div class="wrap" style="margin-left: 10px">
+        <table class="layui-hide" id="user" lay-filter="user" ></table>
+        <script type="text/html" id="toolbar">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-sm" lay-event="getCheckData">保存数据</button>
+            </div>
+        </script>
+</div>
+<script src="/static/layui/layui.js" charset="utf-8"></script>
+<script src="/static/js/jquery-3.3.1.min.js" charset="utf-8"></script>
+<script src="/static/js/jquery.cookie.js" charset="utf-8"></script>
+<script>
+    layui.use('table', function(){
+        var role_base = {{ role_base | safe }}
+        var table = layui.table;
+        re_url = "{{url_data|safe}}";
+
+        table.render({
+            elem: '#user'
+            ,height: 'full-30'
+            ,url:'/user_data.html'
+            ,toolbar: '#toolbar' //开启头部工具栏，并为其绑定左侧模板
+            ,where: role_base
+            ,title: '用户数据表格'
+            ,where: {'id':role_base[0],type:re_url}
+            ,cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                ,{field:'order', title:'序号',align:'center', width:'10%',fixed: 'left', unresize: true, sort: true,}
+                ,{field:'name', title:'用户名', width:'15%'}
+                ,{field:'account', title:'账号', width:'15%',sort: true}
+                ,{field:'gender', title:'性别', width:'10%',sort: true}
+                ,{field:'level', title:'账户类型', width:'15%', sort: true}
+                ,{field:'tell', title:'电话', width:'20%'}
+                ,{field:'email', title:'邮箱', width:'15%', sort: true}
+                ,{field:'address',width: '25%', title:'地址'}
+            ]]
+            ,page: true
+            ,id:'Reload'
+        });
+
+        //头工具栏事件
+        table.on('toolbar(user)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'getCheckData':
+                    var data = checkStatus.data;
+                    layer.load(2, {shade: [0.2, '#5B5B5B']});
+                    $.ajax({
+                        url: 'role_user.html',
+                        type: 'POST',
+                        data:{'key': JSON.stringify(role_base),'user_base':JSON.stringify(data),'type':re_url},
+                        headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+                        success: function (base) {
+                            if (base == 'true'){
+                                layer.msg('配置用户成功！', {icon: 1});
+                                setTimeout("window.parent.location.reload();", 2000 )
+                            }else {
+                                layer.msg('配置用户失败，请联系管理员！', {icon: 2});
+                                setTimeout("window.parent.location.reload();", 2000 )
+                            }
+                        }
+                    })
+                    break;
+            };
+        });
+    });
+</script>
+</body>
+</html>

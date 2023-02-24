@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html style="height: calc(100% - 10px);">
+<head>
+    <meta charset="utf-8">
+    <title>首页三</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/admin/layui/css/layui.css" media="all">
+</head>
+<style>
+    .list {
+        display: block;
+        list-style-type: disc;
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+    }
+
+    .list-item {
+        height: 32px;
+        line-height: 32px;
+        color: gray;
+        padding: 5px;
+        padding-left: 15px;
+        border-radius: 4px;
+        margin-top: 5.2px;
+    }
+
+    .layuiadmin-card-status dd {
+        padding: 15px 0;
+        border-bottom: 1px solid #EEE;
+        display: -webkit-flex;
+        display: flex;
+    }
+
+    .pear-container {
+        margin: 10px;
+        background-color: #e2e2e2;
+        height: 100%;
+    }
+
+    .list .list-item {
+        height: 32px;
+        line-height: 32px;
+        color: gray;
+        padding: 5px;
+        padding-left: 15px;
+        border-radius: 4px;
+        margin-top: 5.2px;
+    }
+
+    .low {
+        color: #f707c3bf;
+        margin-left: 10px;
+    }
+
+    .centre {
+        color: #FFB800;
+        margin-left: 10px;
+    }
+
+    .high {
+        color: red;
+        margin-left: 10px;
+    }
+
+    .bt {
+        float: right;
+        margin-top: 5px;
+        margin-right: 35px
+    }
+
+    .btu {
+        width: 45px;
+    }
+
+    .title {
+        color: #00a0e9;
+    }
+</style>
+<body class="pear-container">
+<div class="layui-row layui-col-space10" style="height: 100%;">
+    <div class="layui-col-md9"
+         style="height: 100%;overflow: scroll;background-color: white;overflow-x: hidden;width: 100%">
+        <div class="layui-tab layui-tab-card">
+            <ul class="layui-tab-title">
+                <li>待处理({{ l1 | safe }})</li>
+                <li>已处理({{ l2 | safe }})</li>
+                <li>全部({{ l3 | safe }})</li>
+{#                <button type="submit" class="layui-btn layui-btn-sm bt" lay-submit="" lay-filter="creat">提问</button>#}
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-card-body">
+                        <dl class="layuiadmin-card-status">
+                            {{ result1 | safe }}
+                        </dl>
+                    </div>
+                </div>
+{#                <div class="layui-tab-item">#}
+{#                    <div class="layui-card-body">#}
+{#                        <dl class="layuiadmin-card-status">#}
+{#                            {{ result1 | safe }}#}
+{#                        </dl>#}
+{#                    </div>#}
+{#                </div>#}
+                <div class="layui-tab-item">
+                    <div class="layui-card-body">
+                        <dl class="layuiadmin-card-status">
+                            {{ result2 | safe }}
+                        </dl>
+                    </div>
+                </div>
+                <div class="layui-tab-item">
+                    <div class="layui-card-body">
+                        <dl class="layuiadmin-card-status">
+                            {{ result3 | safe }}
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {#    <div class="layui-col-md3" style="height: 100%;overflow: scroll;background-color: white;overflow-x: hidden;">#}
+    {#        <div class="layui-card">#}
+    {#            <div class="layui-card-header">最近更新</div>#}
+    {#            <div class="layui-card-body">#}
+    {#                <ul class="list">#}
+    {#                    {{result4 | safe}}#}
+    {#                </ul>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
+</div>
+</body>
+</html>
+
+<script src="/static/layui/layui.js" charset="utf-8"></script>
+<script src="../../static/js/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../static/js/jquery.cookie.js"></script>
+<script>
+    layui.use(['form', 'layedit', 'laydate', 'element'], function () {
+        var form = layui.form
+            , layer = layui.layer
+        re_url = "{{url_data|safe}}";
+
+        //监听提问
+        form.on('submit(creat)', function (data) {
+            layer.open({
+                type: 2 //Page层类型
+                , area: ['60%', '80%']
+                , title: '新增用户'
+                , shade: 0.6 //遮罩透明度
+                , anim: 4 //0-6的动画形式，-1不开启
+                , content: ['creat_feedback.html/'] + "?type=" + re_url
+            });
+        });
+
+        form.on('submit(close)', function () {
+            var data = $(this).attr('id')
+            layer.confirm('当前事件已经处理完毕？', {
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                layer.load(0, {shade: [0.2, '#5B5B5B']});
+                $.ajax({
+                    url: 'insert_feedback_detail',
+                    type: 'POST',
+                    data: {'key': 'close', 'base': data, 'type': re_url},
+                    headers: {'X-CSRFtoken': $.cookie('csrftoken')},
+                    success: function (base) {
+                        if (base == 'true') {
+                            layer.msg('操作成功！', {icon: 1});
+                            //下面为跳出iframe框架的页面跳转
+                            setTimeout("window.location.reload();", 1300)
+                        } else {
+                            layer.msg('系统错误，请联系系统管理员！', {icon: 2});
+                            setTimeout("window.location.reload();", 1300)
+                        }
+                    }
+                })
+            });
+            return false;
+        })
+
+        form.on('submit(delete)', function () {
+            var data = $(this).attr('id')
+            layer.confirm('你确定要删除当前数据？', {
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                layer.load(0, {shade: [0.2, '#5B5B5B']});
+                $.ajax({
+                    url: 'insert_feedback_detail',
+                    type: 'POST',
+                    data: {'key': 'delete', 'base': data, 'type': re_url},
+                    headers: {'X-CSRFtoken': $.cookie('csrftoken')},
+                    success: function (base) {
+                        if (base == 'true') {
+                            layer.msg('操作成功！', {icon: 1});
+                            //下面为跳出iframe框架的页面跳转
+                            setTimeout("window.location.reload();", 1300)
+                        } else {
+                            layer.msg('系统错误，请联系系统管理员！', {icon: 2});
+                            setTimeout("window.location.reload();", 1300)
+                        }
+                    }
+                })
+            });
+            return false;
+        })
+    });
+</script>

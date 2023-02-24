@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../static/layui/css/layui.css" media="all">
+    <style>
+        html,
+        body {
+            height: 98%;
+            margin: 0;
+            padding: 0;
+        }
+        .wrap {
+            height: 100%;
+        }
+    </style>
+</head>
+<body style="height:100%;width:99%;">
+<div class="wrap" style="margin-left: 10px">
+    <table class="layui-hide" id="user" lay-filter="user" ></table>
+    <script type="text/html" id="toolbar">
+        <div class="layui-input-inline">
+            <select id="text1" lay-verify="Pname" class="layui-input">
+                <option id="select" value=""></option>
+                {% for m in log_base %}
+                <option value={{ m }}>{{ m }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button class="layui-btn" id = "search" data-type = "reload">查询</button>
+    </script>
+</div>
+<div id="page" style="margin-left:10px;"></div>
+</body>
+<script src="../../static/admin/js/layui.js" charset="utf-8"></script>
+<script src="../../static/js/jquery-3.3.1.min.js" charset="utf-8"></script>
+<script src="../../static/js/jquery.cookie.js"></script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+        re_url = "{{url_data|safe}}";
+
+        table.render({
+            elem: '#user',
+            height: 'full-30',
+            toolbar: '#toolbar',
+            cellMinWidth: 80
+            ,url:'log_data.html'
+            ,title: '用户数据表'
+            ,where: {type:re_url}
+            ,cols: [[
+                {field:'order', title:'序号',align:'center', width:'10%',fixed: 'left', unresize: true, sort: true,}
+                ,{field:'accout', title:'操作账号',sort: true, width:'10%',}
+                ,{field:'name', title:'姓名',sort: true, width:'10%',}
+                ,{field:'ip', title:'操作IP',sort: true, width:'11%',}
+                ,{field:'address', title:'操作地点',sort: true, width:'13%',}
+                ,{field:'time', title:'操作时间', sort: true, width:'15%',}
+                ,{field:'type', title:'类型', sort: true, width:'9%',}
+                ,{field:'content', title:'操作内容'}
+            ]]
+            ,page: true
+            ,id:'Reload'
+        });
+
+        var $ = layui.$, active = {
+            reload:function(){
+                var values=$("#text1 option:selected").val();
+                var index = layer.load(2, {shade: [0.2, '#5B5B5B']});
+                table.reload('Reload',
+                    {page:
+                            {
+                                curr: 1 //重新从第 1 页开始
+                            }
+                        ,where: {log_key:values}//这里传参  向后台
+                    });
+                layer.close(index);
+            }
+        };
+
+        $('body').on('click','#search', function(){
+            var type = 'reload';
+            active[type] ? active[type].call(this) : '';
+        });
+        document.onkeydown = function(){
+            if(window.event.keyCode == 13){
+                $('#search').click()
+            }
+        }
+    });
+</script>
+</html>

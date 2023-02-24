@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../static/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../static/font-awesome-4.7.0/css/font-awesome.css">
+    <style>
+        html,
+        body {
+            height: 98%;
+            margin: 0;
+            padding: 0;
+        }
+        .wrap {
+            height: 100%;
+        }
+        .clear{
+            position: absolute;
+            height: 36px;
+            margin-left: 80%;
+            width: 38px;
+            background-color: white;
+            border: none;
+            top: 1px
+        }
+    </style>
+</head>
+<body style="height:100%;width:99%;">
+<div class="wrap" style="margin-left: 10px;">
+    <table class="layui-hide" id = "menu" lay-filter="menu"></table>
+    <script type="text/html" id="toolbar">
+        <button class="layui-btn" id = "open">全部展开</button>
+        <button class="layui-btn" id = "fold">全部折叠</button>
+        <div class="layui-inline" style="margin-left: 10px">
+            <button id="clearup" class="fa fa-times clear"></button>
+            <input class="layui-input" id="edt-search" autocomplete="off" placeholder="菜单名称">
+        </div>
+        <button class="layui-btn" id = "btn-search" data-type = "reload">查询</button>
+        {% if anzs == 1 %}
+        <a class="layui-btn" id="insert" style="float: right" lay-event="insert">新增</a>
+        {% else %}
+        <a class="layui-btn layui-hide" style="float: right">新增</a>
+        {% endif %}
+    </script>
+    <script type="text/html" id="barDemo">
+        {% verbatim %}
+        {{#  if(d.ckqx == '1'){ }}
+        <a class="layui-btn layui-btn-primary layui-btn-xs detail" lay-event="detail">查看</a>
+        {{#  } else { }}
+        <a class="layui-btn layui-btn-primary layui-btn-xs detail layui-btn-disabled">查看</a>
+        {{#  } }}
+        {{#  if(d.bjqx == '1'){ }}
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        {{#  } else { }}
+        <a class="layui-btn layui-btn-xs layui-btn-disabled">编辑</a>
+        {{#  } }}
+        {{#  if(d.scqx == '1'){ }}
+        <a class="layui-btn layui-btn-danger layui-btn-xs del" lay-event="del">删除</a>
+        {{#  } else { }}
+        <a class="layui-btn layui-btn-danger layui-btn-xs del layui-btn-disabled">删除</a>
+        {{#  } }}
+        {% endverbatim %}
+    </script>
+</div>
+<script src="/static/layui/layui.js" charset="utf-8"></script>
+<script src="/static/js/jquery-3.3.1.min.js" charset="utf-8"></script>
+<script src="/static/js/jquery.cookie.js" charset="utf-8"></script>
+<script type="text/javascript">
+    layui.config({
+        base : 'static/css/'
+    }).extend({
+        treetable : 'treetable-lay/treetable',
+    });
+    layui.use(['treetable', 'table', 'layer'], function () {
+        var table = layui.table;
+        var layer = layui.layer;
+        var treetable = layui.treetable;
+        re_url = "{{url_data|safe}}";
+
+        //渲染表格
+        var renderTable = function(){
+            layer.load(2);
+            treetable.render({
+                height:'full-30',
+                id:'menu',
+                treeColIndex: 2,	//树形图标显示在第几列
+                treeSpid: '0',		//最上级的父级id
+                treeIdName: 'id',	//id字段的名称
+                treePidName: 'pid',	//pid字段的名称，父级菜单id
+                treeDefaultClose: true,	//是否默认折叠
+                treeLinkage: false,		//父级展开时是否自动展开所有子级
+                elem: '#menu',	//表格id
+                url: 'menu_data.html',
+                toolbar: '#toolbar',
+                cellMinWidth: 120,
+                page: false,
+                where: {type:re_url},
+                cols: [[
+                    {field: 'orderid', title: '序号',width:80,align:'center'},
+                    {field: 'caption', title: '菜单名称',width:'15%'},
+                    {field: 'lcon' , title: '图标',width:'20%'},
+                    {field: 'url' , title: '链接',width:'20%'},
+                    {field: 'order' , title: '排序号',sort: true},
+                    {field: 'display' , title: '是否显示',sort: true},
+                    {field: 'remark' , title: '备注'},
+                    { title:'操作',align:'center',width:'15%', toolbar: '#barDemo'}
+                ]],
+                //数据渲染完的回调
+                done: function () {
+                    //关闭加载
+                    layer.closeAll('loading');
+                }
+            })
+        };
+        renderTable();
+
+        //表格工具栏事件监听
+        table.on('toolbar(menu)', function(obj){
+            switch(obj.event){
+                case 'insert':
+                    layer.open({
+                        type: 2 //Page层类型
+                        ,area: ['60%', '80%']
+                        ,title: '新增菜单'
+                        ,shade: 0.6 //遮罩透明度
+                        ,anim: 4 //0-6的动画形式，-1不开启
+                        ,content:['menu_insert.html/'] + "?type=" + re_url
+                    });
+                    break;
+            };
+        });
+
+        //监听工具条
+        table.on('tool(menu)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'detail'){
+                layer.open({
+                    type: 2 //Page层类型
+                    ,area: ['60%', '80%']
+                    ,title: '菜单信息'
+                    ,shade: 0.6 //遮罩透明度
+                    ,anim: 4 //0-6的动画形式，-1不开启
+                    ,content:['menu_detail.html/'] + "?menu_id=" + data.id + "&type=" + re_url
+                });
+            }else if(obj.event === 'edit'){
+                layer.open({
+                    type: 2 //Page层类型
+                    ,area: ['60%', '80%']
+                    ,title: '编辑菜单信息'
+                    ,shade: 0.6 //遮罩透明度
+                    ,anim: 4 //0-6的动画形式，-1不开启
+                    ,content:['menu_edit.html/'] + "?menu_id=" + data.id + "&type=" + re_url
+                });
+            } else if(obj.event === 'del'){
+                layer.confirm('你确定要删除当前数据？', {
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    $.ajax({
+                        url: 'menu_del.html',
+                        type: 'POST',
+                        data:{'key': 'dele','base':data.id,'m_name':data.caption,'type':re_url},
+                        headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+                        success: function (base) {
+                            if (base == 'true'){
+                                layer.msg('删除菜单成功！', {icon: 1});
+                                setTimeout("window.location.reload();", 2000 )
+                            }else if (base == 'null') {
+                                layer.msg('当前账号没有操作权限，操作失败！', {icon: 2});
+                            }else {
+                                layer.msg('当前菜单下有子菜单，不允许删除！', {icon: 2});
+                            }
+                        }
+                    })
+                });
+                return false;
+            }
+        });
+
+        $('body').on('click','#open', function(){
+            treetable.expandAll('#menu');
+        });
+        $('body').on('click','#fold', function(){
+            treetable.foldAll('#menu');
+        });
+
+        $('body').on('click','#btn-search', function(){
+            var keyword = $('#edt-search').val();
+            var searchCount = 0;
+            $('#menu').next('.treeTable').find('.layui-table-body tbody tr td').each(function () {
+                $(this).css('background-color', 'transparent');
+                var text = $(this).text();
+                if (keyword != '' && text.indexOf(keyword) >= 0) {
+                    $(this).css('background-color', 'rgba(23, 195, 57, 0.67)');
+                    treetable.expandAll('#menu');
+                    searchCount++;
+                }
+            });
+            if (keyword == '') {
+                renderTable();
+            } else if (searchCount == 0) {
+                layer.msg("没有找到相关数据!", {icon: 5});
+            }
+        });
+        $('body').on('click','#clearup', function(){
+            $("#edt-search").val("");
+            $('#edt-search').attr('placeholder','菜单名称');
+        });
+        document.onkeydown = function(){
+            if(window.event.keyCode == 13){
+                $('#btn-search').click()
+            }
+        }
+    });
+</script>
+</body>
+</html>

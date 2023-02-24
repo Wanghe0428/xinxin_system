@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en"style="height: 100%;">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="/static/admin/layui/css/layui.css" media="all">
+	<link rel="stylesheet" href="/static/css/chart.css" media="all">
+	<link rel="stylesheet" href="../../static/font-awesome-4.7.0/css/font-awesome.css">
+</head>
+<style>
+    .clear{
+        position: absolute;
+        height: 36px;
+        margin-left: 80%;
+        width: 38px;
+        background-color: white;
+        border: none;
+        top: 1px
+    }
+</style>
+<body style="height: calc(100% - 10px);">
+<div class="dict_man">
+	<div class="dict_man_div">
+		<table class="layui-hide" id="dic_main" lay-filter="dic_main" ></table>
+		<script type="text/html" id="dic_toolbar">
+			<div class="layui-inline">
+				<button id="clearup" class="fa fa-times clear"></button>
+				<input class="layui-input" id="dic_input" autocomplete="off" placeholder="编码/名称">
+			</div>
+			<button class="layui-btn " id = "dic_search" data-type = "reload">查询</button>
+			{% if anzs == 1 %}
+			<a class="layui-btn" id="insert_main" style="float: right" lay-event="insert_main">新增</a>
+			{% else %}
+			<a class="layui-btn layui-hide"  style="float: right" >新增</a>
+			{% endif %}
+		</script>
+		<script type="text/html" id="dic_bar">
+			{% verbatim %}
+			{{#  if(d.sfkck == '1'){ }}
+			<a class="layui-btn layui-btn-primary layui-btn-xs detail" lay-event="detail">查看</a>
+			{{#  } else { }}
+			<a class="layui-btn layui-btn-primary layui-btn-xs detail layui-btn-disabled">查看</a>
+			{{#  } }}
+			{{#  if(d.sfkbj == '1'){ }}
+			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+			{{#  } else { }}
+			<a class="layui-btn layui-btn-xs layui-btn-disabled">编辑</a>
+			{{#  } }}
+			{{#  if(d.sfksc == '1'){ }}
+			<a class="layui-btn layui-btn-danger layui-btn-xs del" lay-event="del">删除</a>
+			{{#  } else { }}
+			<a class="layui-btn layui-btn-danger layui-btn-xs del layui-btn-disabled">删除</a>
+			{{#  } }}
+			{{#  if(d.sfkbj == '1'){ }}
+			<a class="layui-btn layui-btn-xs detail" lay-event="insert">配参数</a>
+			{{#  } else { }}
+			<a class="layui-btn layui-btn-xs detail layui-btn-disabled">配参数</a>
+			{{#  } }}
+			{% endverbatim %}
+		</script>
+	</div>
+	<div class="dict_additive_div">
+		<table class="layui-hide" id="dic_child" lay-filter="dic_child" ></table>
+		<script type="text/html" id="ddic_child_bar">
+			{% verbatim %}
+			{{#  if(d.sfkck == '1'){ }}
+			<a class="layui-btn layui-btn-primary layui-btn-xs detail" lay-event="detail">查看</a>
+			{{#  } else { }}
+			<a class="layui-btn layui-btn-primary layui-btn-xs detail layui-btn-disabled">查看</a>
+			{{#  } }}
+			{{#  if(d.sfkbj == '1'){ }}
+			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+			{{#  } else { }}
+			<a class="layui-btn layui-btn-xs layui-btn-disabled">编辑</a>
+			{{#  } }}
+			{{#  if(d.sfksc == '1'){ }}
+			<a class="layui-btn layui-btn-danger layui-btn-xs del" lay-event="del">删除</a>
+			{{#  } else { }}
+			<a class="layui-btn layui-btn-danger layui-btn-xs del layui-btn-disabled">删除</a>
+			{{#  } }}
+			{% endverbatim %}
+		</script>
+	</div>
+</div>
+</body>
+</html>
+<script src="/static/admin/js/layui.js" charset="utf-8"></script>
+<script src="/static/js/jquery-3.3.1.min.js" charset="utf-8"></script>
+<script src="/static/js/jquery.cookie.js" charset="utf-8"></script>
+<script>
+	layui.use(['tree', 'table','util'], function(){
+		var table = layui.table;
+		util = layui.util;
+		re_url = "{{url_data|safe}}";
+		re_bj = "{{bjqx|safe}}";
+		re_sc = "{{scqx|safe}}";
+
+
+		table.render({
+			elem: '#dic_main',
+			height: 'full-30',
+			toolbar: '#dic_toolbar',
+			cellMinWidth: 100
+			,url:'dictkey_data'
+			,title: '字典主表'
+			,where: {type:re_url}
+			,cols: [[
+				{field:'key', title:'字典编码',align:'center', width:'30%',fixed: 'left', sort: true,}
+				,{field:'name', title:'字典名称', width:'25%',sort: true}
+				,{ title:'操作',align:'center',minwidth:150,toolbar: '#dic_bar'}
+			]]
+			,page: true
+			,id:'dic_table'
+			,done:function (res,curr,count) {
+				counnumber = count
+			}
+		});
+
+		active = {
+			reload:function(){
+				var $ = layui.$
+				var values =$("#dic_input").val();
+				var index = layer.load(2, {shade: [0.2, '#5B5B5B']});
+				table.reload('dic_table',
+						{page:
+									{
+										curr: 1 //重新从第 1 页开始
+									}
+							,where: {serch_key:values}//这里传参  向后台
+						});
+				$("#dic_input").attr("value", values);
+				layer.close(index);
+			}
+		};
+		$('body').on('click','#dic_search', function(){
+			var type = 'reload';
+			active[type] ? active[type].call(this) : '';
+		});
+		        $('body').on('click','#clearup', function(){
+            $("#dic_input").val("");
+            $('#dic_input').attr('placeholder','编码/名称');
+        });
+		document.onkeydown = function(){
+			if(window.event.keyCode == 13){
+				$('#search').click()
+			}
+		};
+
+		//表格工具栏事件监听
+		table.on('toolbar(dic_main)', function(obj){
+			switch(obj.event){
+				case 'insert_main':
+					layer.open({
+						type: 2 //Page层类型
+						,area:['500px', '350px']
+						,title: '新增字典'
+						,shade: 0.6 //遮罩透明度
+						,anim: 4 //0-6的动画形式，-1不开启
+						,content:['dict_main_insert.html/']+ "?type=" + re_url
+					});
+					break;
+			};
+		});
+		table.on('tool(dic_main)', function(obj){
+			var data = obj.data;
+			if(obj.event === 'detail'){
+				layer.open({
+					type: 2 //Page层类型
+					,area: ['500px', '350px']
+					,title: '字典详情'
+					,shade: 0.6 //遮罩透明度
+					,anim: 4 //0-6的动画形式，-1不开启
+					,content:['dict_main_detail.html/'] + "?main_id=" + data.id + "&type=" + re_url
+				});
+			} else if(obj.event === 'del'){
+				layer.confirm('你确定要删除当前数据？', {
+					btn: ['确定','取消'] //按钮
+				}, function(){
+					layer.load(0, {shade: [0.2, '#5B5B5B']});
+					$.ajax({
+						url: 'dict_main_delete',
+						type: 'POST',
+						data:{'key': 'delete','ID':data.id,'dic_key':data.key,'name':data.name,'type':re_url},
+						headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+						success: function (base) {
+							if (base == 'true'){
+								layer.msg('删除字典成功！', {icon: 1});
+								setTimeout("window.location.reload();", 1300 )
+							}else if (base == 'false'){
+								layer.msg('当前用户没有相关权限，请联系管理员！', {icon: 2});
+								setTimeout("window.location.reload();", 1300 )
+							}else if (base == 'null'){
+								layer.msg('系统参数不能删除！', {icon: 2});
+								setTimeout("window.location.reload();", 1300 )
+							}else if (JSON.parse(base) == "exist"){
+								layer.msg('字典下存在参数，无法删除！', {icon: 2});
+								setTimeout("window.location.reload();", 1300 )
+							}else {
+								layer.msg('删除字典失败，请联系管理员！', {icon: 2});
+								setTimeout("window.location.reload();", 1300 )
+							}
+						}
+					})
+				});
+				return false;
+			} else if(obj.event === 'edit'){
+				layer.open({
+					type: 2 //Page层类型
+					,area: ['500px', '350px']
+					,title: '编辑字典'
+					,shade: 0.6 //遮罩透明度
+					,anim: 4 //0-6的动画形式，-1不开启
+					,content:['dict_main_edit.html/'] + "?main_id=" + data.id + "&type=" + re_url
+				});
+			} else if(obj.event === 'insert'){
+				layer.open({
+					type: 2 //Page层类型
+					,area: ['500px', '350px']
+					,title: '新增字典参数'
+					,shade: 0.6 //遮罩透明度
+					,anim: 4 //0-6的动画形式，-1不开启
+					,content:['dic_child_insert.html/'] + "?main_id=" + data.id + "&type=" + re_url
+				});
+			}
+		});
+
+		table.on('row(dic_main)', function(obj) {
+			var data = JSON.stringify(obj.data),
+					checkStatus = table.checkStatus('child_table'),
+					checkdata = checkStatus.data,
+					index = layer.load(2, {shade: [0.2, '#5B5B5B']});
+			//设置表格变色
+			var data_index = $(this).attr('data-index');//得到当前的tr的index
+			for (var i = 0 ; i < counnumber; i++)//countNum为总行数
+			{
+				if (i % 2 == 0) { //设置隔行换色
+					$(".layui-table-body tr[data-index=" + i + "]").attr({ "style": "color:black" });//恢复原有tr颜色
+				} else {
+					$(".layui-table-body tr[data-index=" + i + "]").attr({ "style": "color:black" });//恢复原有tr颜色
+				}
+			}
+			$(".layui-table-body tr[data-index=" + data_index + "]").attr({ "style": "background:#00ffffc2" });//改变当前tr颜色
+			//点击表格行对应的事件
+			if(checkdata.length==0){
+				table.reload('child_table',
+						{page:
+									{
+										curr: 1 //重新从第 1 页开始
+									}
+							,where: {keyword: 'obtain',base:data}//这里传参  向后台
+						});
+
+			}else {
+				var type = 'child_table';
+				active[type] ? active[type].call(this) : '';
+			}
+			layer.close(index);
+		});
+
+		table.render({
+			elem: '#dic_child',
+			height: 'full-30',
+			// toolbar: '#toolbar',
+			cellMinWidth: 80
+			,url:'dictvalues_data'
+			,title: '字典从表'
+			,where: {type:re_url}
+			,cols: [[
+				{field:'order', title:'序号',align:'center', width:100,fixed: 'left', unresize: true, sort: true,}
+				,{field:'dic_key', title:'参数名', width:'25%',sort: true}
+				,{field:'dic_values', title:'参数值', width:'25%',sort: true}
+				,{ title:'操作',align:'center',minwidth:150,toolbar: '#ddic_child_bar'}
+			]]
+			,page: true
+			,id:'child_table'
+		});
+		table.on('tool(dic_child)', function(obj){
+			var data = obj.data;
+			if(obj.event === 'detail'){
+				layer.open({
+					type: 2 //Page层类型
+					,area: ['500px', '350px']
+					,title: '字典属性详情'
+					,shade: 0.6 //遮罩透明度
+					,anim: 4 //0-6的动画形式，-1不开启
+					,content:['dic_child_detail.html/'] + "?main_id=" + data.id + "&type=" + re_url
+				});
+			} else if(obj.event === 'del'){
+				layer.confirm('你确定要删除当前数据？', {
+					btn: ['确定','取消'] //按钮
+				}, function(){
+					layer.load(0, {shade: [0.2, '#5B5B5B']});
+					$.ajax({
+						url: 'dic_child_delete',
+						type: 'POST',
+						data:{'key': 'delete','ID':data.id,'name':data.dic_values,'type':re_url},
+						headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+						success: function (base) {
+							if (base == 'true'){
+								layer.msg('删除字典编码成功！', {icon: 1});
+								setTimeout("window.location.reload();", 1300 )
+							}else if (base == 'false'){
+								layer.msg('删除字典编码失败，请联系管理员！', {icon: 2});
+								setTimeout("window.location.reload();", 1300 )
+							}else if (JSON.parse(base) == 'system'){
+								layer.msg('系统参数，不能删除！', {icon: 2});
+								setTimeout("window.location.reload();", 1300 )
+							}else {
+								layer.msg('非法操作，即将退出系统！', {icon: 2});
+								setTimeout("window.parent.location.href='/login.html'", 1300 )
+							}
+						}
+					})
+				});
+				return false;
+			} else if(obj.event === 'edit'){
+				layer.open({
+					type: 2 //Page层类型
+					,area: ['500px', '350px']
+					,title: '编辑字典属性'
+					,shade: 0.6 //遮罩透明度
+					,anim: 4 //0-6的动画形式，-1不开启
+					,content:['dic_child_edit.html/'] + "?main_id=" + data.id + "&type=" + re_url
+				});
+			}
+		});
+	})
+</script>

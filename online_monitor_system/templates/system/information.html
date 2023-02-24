@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN" style="height: 100%">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../static/layui/css/layui.css" media="all">
+</head>
+<style>
+    .layerdemo{
+        letter-spacing: 3px;     /*字母间距*/
+        word-spacing: 3px;    /*单词间距*/
+        line-height: 28px;    /*行高*/
+        margin-top: -20px;
+    }
+</style>
+<body>
+<div style="margin-top: -11px">
+    <table class="layui-hide" id="info" lay-filter="info" ></table>
+    <script type="text/html" id="barDemo">
+        <button type="button" class="layui-btn layui-btn-sm" lay-event="delete"><i class="layui-icon"></i></button>
+    </script>
+</div>
+<script src="/static/layui/layui.js" charset="utf-8"></script>
+<script src="/static/js/jquery-3.3.1.min.js" charset="utf-8"></script>
+<script src="/static/js/jquery.cookie.js" charset="utf-8"></script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+        re_url = "{{url_data|safe}}";
+
+        table.render({
+            elem: '#info',
+            url:'information_data.html'
+            ,title: '用户数据表'
+            ,where: {type:re_url}
+            ,cols: [[
+                {field:'type',unresize: true,width:90,sort: true}
+                ,{field:'content',unresize: true, sort: true}
+                ,{field:'state',unresize: true,width:60,sort: true}
+                ,{align:'center',width:80,toolbar: '#barDemo'}
+            ]]
+            ,page: true
+            ,id:'Reload'
+            ,done:function (res, curr, count) {
+                var that = this.elem.next();
+                $('.layui-table .layui-table-cell > span').css({'font-weight': 'bold'});//表头字体样式
+                $('th').hide();//表头隐藏的样式
+                res.data.forEach(function (item, index) {
+                    if (item.state == '已读') {
+                        var tr = that.find(".layui-table-box tbody tr[data-index='" + index + "']").css("color", "rgb(124 135 127 / 66%)");
+                    }
+                    else {
+                        var tr = that.find(".layui-table-box tbody tr[data-index='" + index + "']").css("color", "rgb(8 175 238)");
+                    }
+                })
+            }
+        });
+
+
+        //监听工具条
+        table.on('tool(info)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'delete'){
+                layer.confirm('你确定要删除当前数据？', {
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    layer.load(0, {shade: [0.2, '#5B5B5B']});
+                    $.ajax({
+                        url: 'information_del.html',
+                        type: 'POST',
+                        data:{'key': 'delete','ID':data.id},
+                        headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+                        success: function (base) {
+                            if (base == 'true'){
+                                layer.msg('删除消息成功！', {icon: 1});
+                                setTimeout("window.location.reload();", 1000 )
+                            }
+                            else {
+                                layer.msg('删除消息失败，请联系管理员！', {icon: 2});
+                                setTimeout("window.location.reload();", 1000 )
+                            }
+                        }
+                    })
+                });
+                return false;
+            }
+        });
+
+        //监听行单击事件（双击事件为：rowDouble）
+        table.on('row(info)', function(obj){
+            var data = obj.data;
+
+            layer.open({
+                type: 1,
+                title: '消息内容',
+                closeBtn: 1,
+                area: ['90%', '60%'],
+                shadeClose: true,
+                skin: 'layerdemo',
+                content: data.content,
+                end:function () {
+                    $.ajax({
+                        url: 'information_update.html',
+                        type: 'POST',
+                        data:{'key': 'update','ID':data.id,'state':data.state},
+                        headers:{'X-CSRFtoken':$.cookie('csrftoken')},
+                        success: function (base) {
+                            if (base == 'true'){
+                                setTimeout("window.location.reload();")
+                            }
+                        }
+                    })
+                }
+            });
+        })
+    });
+</script>
+</body>
+</html>
