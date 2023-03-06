@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" style="width: 100%; height: 100%">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .title {
+        margin-top: 20px;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
+        display: flex;
+        width: 33%;
+        height: 125px;
+        display: flex;
+      }
+      .panda {
+        width: 120px;
+        height: 120px;
+        flex: 1;
+      }
+      .title_text {
+        flex: 3;
+        display: flex;
+        height: 90px;
+        flex-direction: column;
+        justify-content: center;
+        margin-left: 10px;
+      }
+      .navigate_content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: 84px;
+        transform: translate(-50%, -50%);
+        width: 70%;
+        height: 40%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+      .left_triangle {
+        width: 0;
+        height: 0;
+        border: 0;
+        border: 40px solid transparent;
+        border-right: 100px solid rgba(81, 81, 81);
+      }
+      .right_triangle {
+        width: 0;
+        height: 0;
+        border: 0;
+        border: 40px solid transparent;
+        border-left: 100px solid rgba(81, 81, 81);
+      }
+      .matrix {
+        cursor: pointer;
+        width: 120px;
+        height: 200px;
+      }
+      .res_manage {
+        background-color: #c5e0b4;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: 10px 10px 5px #ccc;
+        /*box-shadow:水平位置，垂直位置，模糊距离，阴影尺寸，阴影颜色，inset*/
+      }
+      .online_observe {
+        background-color: #e6ea6e;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: 10px 10px 5px #ccc;
+      }
+      .data_Visualization {
+        background-color: #9dc3e6;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: 10px 10px 5px #ccc;
+      }
+    </style>
+  </head>
+  <body style="width: 100%; height: 100%">
+    <div class="content" style="width: 100%; height: 100%; position: relative">
+      <div style="width: 100%; height: 100%; position: absolute">
+        <img
+          src="../../static/images/birds-7332433_960_720.jpg"
+          alt=""
+          width="100%"
+          height="100%"
+        />
+      </div>
+      <div class="title">
+        <div class="panda">
+          <img src="../../static/images/6.panda.png" width="100%" alt="" />
+        </div>
+        <div class="title_text">
+          <div style="font-family: '宋体'; font-size: 36px; font-weight: 700">
+            濒危动物跟踪系统
+          </div>
+          <div
+            style="
+              font-family: 'Times New Roman', Times, serif;
+              font-size: 26px;
+              margin-top: 20px;
+            "
+          >
+            Endangered animals tracking system
+          </div>
+        </div>
+      </div>
+      <div class="navigate_content">
+        <div class="left_triangle"></div>
+        <div class="matrix res_manage">
+          <div style="width: 79px; height: 57px">
+            <img width="100%" src="../../static/images/7.素材管理.png" alt="" />
+          </div>
+          <div style="font-family: '楷体'; font-size: 22px; font-weight: 600">
+            素材管理
+          </div>
+        </div>
+        <div class="matrix online_observe">
+          <div style="width: 79px; height: 57px">
+            <img width="100%" src="../../static/images/8.在线跟踪.png" alt="" />
+          </div>
+          <div style="font-family: '楷体'; font-size: 22px; font-weight: 600">
+            在线跟踪
+          </div>
+        </div>
+        <div class="matrix data_Visualization">
+          <div style="width: 79px; height: 57px">
+            <img
+              width="100%"
+              src="../../static/images/9.数据可视化.png"
+              alt=""
+            />
+          </div>
+          <div style="font-family: '楷体'; font-size: 22px; font-weight: 600">
+            数据可视化
+          </div>
+        </div>
+        <div class="right_triangle"></div>
+      </div>
+    </div>
+  </body>
+</html>
+<script
+  src="../../static/admin/layui/layui.js"
+  type="text/javascript"
+  charset="utf-8"
+></script>
+<script
+  src="../../static/admin/js/common.js"
+  type="text/javascript"
+  charset="utf-8"
+></script>
+<script
+  src="../../static/admin/js/main.js"
+  type="text/javascript"
+  charset="utf-8"
+></script>
+<script
+  src="../../static/js/jquery-3.3.1.min.js"
+  type="text/javascript"
+  charset="utf-8"
+></script>
+<script src="../../static/js/jquery.cookie.js"></script>
+<script>
+  $(".res_manage").click(function () {
+    // $(".layui-tab-content").html("");
+    console.log(1);
+    let iframe = document.createElement("iframe");
+    iframe.src = "resource_manage.html";
+    iframe.style = "width: 100%; height: 100%; border: 0";
+    $(".content").html(iframe);
+  });
+
+  $(".online_observe").click(function () {
+    // $(".layui-tab-content").html("");
+    console.log(1);
+    let iframe = document.createElement("iframe");
+    iframe.src = "online_observe.html";
+    iframe.style = "width: 100%; height: 100%; border: 0";
+
+    $(".content").html(iframe);
+  });
+
+  $(".data_Visualization").click(function () {
+    // $(".layui-tab-content").html("");
+    let iframe = document.createElement("iframe");
+    iframe.src = "data_Visualization.html";
+    iframe.style = "width: 100%; height: 100%; border: 0";
+    $(".content").html(iframe);
+  });
+</script>

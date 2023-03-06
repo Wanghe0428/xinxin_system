@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect, HttpResponse
 from app import models
-import json, datetime, hashlib, uuid
+import json
+import datetime
+import hashlib
+import uuid
 # Create your views here.
 from utils import call
 from utils import query
@@ -131,7 +134,8 @@ def theme_use(request):
         if call.is_edit_grant(request, re_url):
             theme_id = request.POST
             models.SysTheme.objects.filter(id=theme_id['base']).update(state=1)
-            models.SysTheme.objects.exclude(id=theme_id['base']).update(state=0)
+            models.SysTheme.objects.exclude(
+                id=theme_id['base']).update(state=0)
             call.create_log(request, 'update', '修改了', '桌面壁纸')
             return HttpResponse(json.dumps(True))
         else:
@@ -207,7 +211,8 @@ def information_data(request):
             else:
                 info['state'] = '未读'
             base.append(info)
-        data = {'code': 0, 'page_num': 1, 'bg_hs': 10, 'count': 0, 'data': base}
+        data = {'code': 0, 'page_num': 1,
+                'bg_hs': 10, 'count': 0, 'data': base}
         return HttpResponse(json.dumps(data))
     else:
         return redirect('/login.html')
@@ -229,7 +234,8 @@ def information_update(request):
     if call.is_login(request):
         up_id = request.POST
         if up_id['state'] == '未读':
-            models.SysInformation.objects.filter(id=up_id['ID']).update(state=1)
+            models.SysInformation.objects.filter(
+                id=up_id['ID']).update(state=1)
             return HttpResponse(json.dumps(True))
         else:
             return HttpResponse(json.dumps(False))
@@ -291,7 +297,8 @@ def role_edit(request):
             if call.is_edit_grant(request, re_url):
                 role_id = request.GET.get('role_id', None)
                 role_obj = models.SysRole.objects.filter(id=role_id)
-                call.create_log(request, 'select', '查看角色', role_obj.values()[0]['caption'])
+                call.create_log(request, 'select', '查看角色',
+                                role_obj.values()[0]['caption'])
                 role_base = list(role_obj.values_list()[0])
                 return render(request, 'system/role_edit.html', {'role_base': role_base, 'url_data': re_url})
             else:
@@ -307,9 +314,12 @@ def role_del(request):
             re_url = request.POST.get('type', None)
             if call.is_delete_grant(request, re_url):
                 re_id = request.POST
-                cur.execute("delete from sys_role_menu where role_id = %s", [re_id['base']])
-                cur.execute("delete from sys_user_role where rle_id = %s", [re_id['base']])
-                cur.execute("delete from sys_role where id = %s", [re_id['base']])
+                cur.execute("delete from sys_role_menu where role_id = %s", [
+                            re_id['base']])
+                cur.execute("delete from sys_user_role where rle_id = %s", [
+                            re_id['base']])
+                cur.execute("delete from sys_role where id = %s",
+                            [re_id['base']])
                 call.create_log(request, 'delete', '删除角色', re_id['ro_name'])
                 cur.close()
                 return HttpResponse(json.dumps(True))
@@ -464,8 +474,10 @@ def user_del(request):
                 if key == 'delete':
                     user_id = request.POST.get('ID', None)
                     user_name = request.POST.get('name', None)
-                    cur.execute("delete from sys_user_role where user_id = %s", [user_id])
-                    cur.execute("delete from sys_user where id = %s", [user_id])
+                    cur.execute(
+                        "delete from sys_user_role where user_id = %s", [user_id])
+                    cur.execute(
+                        "delete from sys_user where id = %s", [user_id])
                     call.create_log(request, 'delete', '删除用户', user_name)
                     cur.close()
                     return HttpResponse(json.dumps(True))
@@ -506,7 +518,8 @@ def menu_insert(request):
                                               lcon=role_id['base[font]'], url=role_id['base[link]'], pid=role_id['key'],
                                               remark=role_id['base[remark]'], display=sfxs)
                 call.grant_creat(menu_id, role_id)
-                call.create_log(request, 'create', '创建菜单', role_id['base[p_name]'])
+                call.create_log(request, 'create', '创建菜单',
+                                role_id['base[p_name]'])
                 return HttpResponse(json.dumps(True))
             else:
                 return HttpResponse(json.dumps(False))
@@ -558,7 +571,8 @@ def menu_edit(request):
                 sfxs = 1
             else:
                 sfxs = 0
-                models.SysMenu.objects.filter(pid=menu_base['base[menu_id]']).update(display=sfxs)
+                models.SysMenu.objects.filter(
+                    pid=menu_base['base[menu_id]']).update(display=sfxs)
             call.grant_update(menu_base)
             models.SysMenu.objects.filter(id=menu_base['base[menu_id]']).update(caption=menu_base['base[p_name]'],
                                                                                 order=menu_base['base[order]'],
@@ -567,7 +581,8 @@ def menu_edit(request):
                                                                                 pid=menu_base['key'],
                                                                                 remark=menu_base['base[remark]'],
                                                                                 display=sfxs)
-            call.create_log(request, 'update', '编辑菜单', menu_base['base[p_name]'])
+            call.create_log(request, 'update', '编辑菜单',
+                            menu_base['base[p_name]'])
             return HttpResponse(json.dumps(True))
         else:
             re_url = request.GET.get('type', None)
@@ -586,15 +601,21 @@ def menu_del(request):
         menu_base = request.POST
         re_url = request.POST.get('type', None)
         if call.is_delete_grant(request, re_url):
-            count = cur.execute("select id from sys_menu where pid = %s", [menu_base['base']])
+            count = cur.execute("select id from sys_menu where pid = %s", [
+                                menu_base['base']])
             if count > 0:  # 有子菜单
                 return HttpResponse(json.dumps(False))
             else:  # 没有子菜单
-                cur.execute("delete from sys_role_menu where menu_id = %s", [menu_base['base']])
-                models.SysGrant.objects.filter(menu_id=menu_base['base']).delete()
-                cur.execute("delete from sys_menu where id = %s", [menu_base['base']])
-                models.SysUserGrant.objects.filter(menu_id=menu_base['base']).delete()
-                models.SysGrant.objects.filter(menu_id=menu_base['base']).delete()
+                cur.execute("delete from sys_role_menu where menu_id = %s", [
+                            menu_base['base']])
+                models.SysGrant.objects.filter(
+                    menu_id=menu_base['base']).delete()
+                cur.execute("delete from sys_menu where id = %s",
+                            [menu_base['base']])
+                models.SysUserGrant.objects.filter(
+                    menu_id=menu_base['base']).delete()
+                models.SysGrant.objects.filter(
+                    menu_id=menu_base['base']).delete()
                 call.create_log(request, 'delete', '删除菜单', menu_base['m_name'])
             cur.close()
             return HttpResponse(json.dumps(True))
@@ -665,12 +686,14 @@ def org_add(request):
             re_url = request.POST.get('type', None)
             if call.is_edit_grant(request, re_url):
                 n_base = request.POST
-                ex_val = models.SysOrg.objects.filter(org_code=n_base['base[Code]'])
+                ex_val = models.SysOrg.objects.filter(
+                    org_code=n_base['base[Code]'])
                 if len(ex_val) == 0:
                     models.SysOrg.objects.create(id=uid(), org_code=n_base['base[Code]'], org_name=n_base['base[name]'],
                                                  pid=n_base['base[PID]'], remark=n_base['base[remark]'],
                                                  great_date=now_time())
-                    call.create_log(request, 'create', '新增部门', n_base['base[name]'])
+                    call.create_log(request, 'create', '新增部门',
+                                    n_base['base[name]'])
                     return HttpResponse(json.dumps(True))
                 else:
                     return HttpResponse(json.dumps(False))
@@ -698,7 +721,8 @@ def org_edit(request):
                 n_base = request.POST
                 models.SysOrg.objects.filter(org_code=n_base['base[Code]']).update(org_name=n_base['base[name]'],
                                                                                    remark=n_base['base[remark]'])
-                call.create_log(request, 'update', '编辑部门', n_base['base[name]'])
+                call.create_log(request, 'update', '编辑部门',
+                                n_base['base[name]'])
                 return HttpResponse(json.dumps(True))
             else:
                 return HttpResponse(json.dumps(False))
@@ -733,7 +757,8 @@ def org_del(request):
                 return HttpResponse(json.dumps(False))
             else:
                 models.SysOrg.objects.filter(id=del_base['base']).delete()
-                models.SysUserOrg.objects.filter(org_id=del_base['base']).delete()
+                models.SysUserOrg.objects.filter(
+                    org_id=del_base['base']).delete()
                 return HttpResponse(json.dumps(True))
         else:
             return HttpResponse(json.dumps(None))
@@ -910,7 +935,8 @@ def dict_main_edit(request):
             re_url = request.POST.get('type', None)
             if call.is_edit_grant(request, re_url):
                 data = request.POST
-                models.SysDicMain.objects.filter(id=data['base[id]']).update(name=data['base[csms]'])
+                models.SysDicMain.objects.filter(
+                    id=data['base[id]']).update(name=data['base[csms]'])
                 call.create_log(request, 'edit', '编辑了字典属性', data['base[csms]'])
                 return HttpResponse(json.dumps(True))
             else:
@@ -954,11 +980,15 @@ def dict_main_delete(request):
             try:
                 data = request.POST
                 if data['dic_key'] != 'system':
-                    count = models.SysDicFrom.objects.filter(p_id=data['ID']).count()
+                    count = models.SysDicFrom.objects.filter(
+                        p_id=data['ID']).count()
                     if count == 0:
-                        models.SysDicFrom.objects.filter(p_id=data['ID']).delete()
-                        models.SysDicMain.objects.filter(id=data['ID']).delete()
-                        call.create_log(request, 'delete', '删除了字典属性', data['name'])
+                        models.SysDicFrom.objects.filter(
+                            p_id=data['ID']).delete()
+                        models.SysDicMain.objects.filter(
+                            id=data['ID']).delete()
+                        call.create_log(request, 'delete',
+                                        '删除了字典属性', data['name'])
                         return HttpResponse(json.dumps(True))
                     else:
                         return HttpResponse(json.dumps('exist'))
@@ -1008,7 +1038,8 @@ def dic_child_edit(request):
                 data = request.POST
                 models.SysDicFrom.objects.filter(id=data['base[id]']).update(dic_key=data['base[zdbm]'],
                                                                              dic_values=data['base[zdmc]'])
-                call.create_log(request, 'update', '编辑了字典参数', data['base[zdmc]'])
+                call.create_log(request, 'update', '编辑了字典参数',
+                                data['base[zdmc]'])
                 return HttpResponse(json.dumps(True))
             else:
                 return render(request, 'system/403.html')
@@ -1052,7 +1083,8 @@ def dic_child_delete(request):
                 for sys in sys_date.values('id'):
                     Parent_id = sys['id']
                 if models.SysDicFrom.objects.filter(Q(id=data['ID']) & ~Q(p_id=Parent_id)).count() > 0:
-                    models.SysDicFrom.objects.filter(Q(id=data['ID']) & ~Q(p_id=Parent_id)).delete()
+                    models.SysDicFrom.objects.filter(
+                        Q(id=data['ID']) & ~Q(p_id=Parent_id)).delete()
                     call.create_log(request, 'delete', '删除了字典参数', data['name'])
                     return HttpResponse(json.dumps(True))
                 else:
@@ -1117,11 +1149,13 @@ def change_org(request):
 def information_batch_del(request):
     if call.is_login(request):
         user_id = request.session['user_id']
-        not_dalete = models.SysInformation.objects.filter(Q(user_id=user_id) & Q(state=1))
+        not_dalete = models.SysInformation.objects.filter(
+            Q(user_id=user_id) & Q(state=1))
         if len(not_dalete) == 0:
             return HttpResponse(json.dumps(False))
         else:
-            models.SysInformation.objects.filter(Q(user_id=user_id) & Q(state=1)).delete()
+            models.SysInformation.objects.filter(
+                Q(user_id=user_id) & Q(state=1)).delete()
             return HttpResponse(json.dumps(True))
     else:
         return redirect('/login.html')
@@ -1130,10 +1164,45 @@ def information_batch_del(request):
 def information_batch_read(request):
     if call.is_login(request):
         user_id = request.session['user_id']
-        not_reda = models.SysInformation.objects.filter(Q(user_id=user_id) & Q(state=0)).update(state=1)
+        not_reda = models.SysInformation.objects.filter(
+            Q(user_id=user_id) & Q(state=0)).update(state=1)
         if not_reda == 0:
             return HttpResponse(json.dumps(False))
         else:
             return HttpResponse(json.dumps(True))
     else:
         return redirect('/login.html')
+
+
+def resource_manage(request):
+    if call.is_login(request):
+        print(11)
+        return render(request, 'system/resource_manage.html')
+    else:
+        return redirect('/login.html')
+
+
+def online_observe(request):
+    if call.is_login(request):
+        print(11)
+        return render(request, 'system/online_observe.html')
+    else:
+        return redirect('/login.html')
+
+
+def title(request):
+    if call.is_login(request):
+        return render(request, 'system/title.html')
+    else:
+        return redirect('/login.html')
+
+
+def data_Visualization(request):
+    if call.is_login(request):
+        return render(request, 'system/data_Visualization.html')
+    else:
+        return redirect('/login.html')
+
+
+def about(request):
+    return render(request, 'system/about.html')

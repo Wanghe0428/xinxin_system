@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    #main {
+      width: 300px;
+      height: 126px;
+      overflow: hidden;
+      position: absolute;
+    }
+  </style>
+
+  <body>
+    <div id="main">
+      <div id="dom1">
+        <ul>
+          <div class="blank"></div>
+          <div class="blank"></div>
+          <div class="blank"></div>
+          <div class="blank"></div>
+          <div class="blank"></div>
+          <div class="blank"></div>
+          <div class="blank"></div>
+          <li>aaaaaaaaaa</li>
+          <li>bbbbbbbbbb</li>
+          <li>ccccccccccc</li>
+          <li>ddddddddddd</li>
+          <li>eeeeeeeeeee</li>
+          <li>fffffffffff</li>
+          <li>ggggggggggggg</li>
+          <li>hhhhhhhhhhhhhh</li>
+          <li>iiiiiiiiiiiiii</li>
+          <li>jjjjjjjjjjjjj</li>
+          <li>kkkkkkkkkkkkkk</li>
+          <li>llllllllllll</li>
+          <li>aaaaaaaaaa</li>
+          <li>bbbbbbbbbb</li>
+          <li>ccccccccccc</li>
+          <li>ddddddddddd</li>
+          <li>eeeeeeeeeee</li>
+          <li>fffffffffff</li>
+          <li>ggggggggggggg</li>
+          <li>hhhhhhhhhhhhhh</li>
+          <li>iiiiiiiiiiiiii</li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
+<script>
+  var main = document.getElementById("main");
+  var dom1 = document.getElementById("dom1");
+  //创建用于复制dom1的新节点
+  var newnode = document.createElement("div");
+  newnode.id = "dom2";
+  main.appendChild(newnode);
+  var dom2 = document.getElementById("dom2");
+  var speed = 15; //设置速度
+  dom2.innerHTML = dom1.innerHTML; //复制dom1节点
+  // 滚动函数
+  function moveTop() {
+    // 当main向上滚动超出部分>=滚动节点高度时, 设置为scrollTop为0
+    if (dom1.offsetHeight - main.scrollTop <= 0) {
+      main.scrollTop = 0;
+      // 或者main.scrollTop -= dom1.offsetHeight;
+    } else {
+      main.scrollTop++;
+    }
+  }
+
+  var myMarquee = setInterval(moveTop, speed); //设置定时器
+  // 鼠标悬停时清除定时器停止滚动，移出后继续滚动
+  main.onmouseover = function () {
+    clearInterval(myMarquee);
+  };
+  main.onmouseout = function () {
+    myMarquee = setInterval(moveTop, speed);
+  };
+</script>

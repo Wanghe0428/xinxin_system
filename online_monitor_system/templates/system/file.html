@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>文件上传示例</title>
+  </head>
+  <body>
+    <h1>文件上传示例</h1>
+    <form enctype="multipart/form-data">
+      <input type="file" id="wh" name="fileToUpload" id="fileToUpload" />
+      <button type="button" onclick="uploadFile()">上传文件</button>
+    </form>
+    <div id="uploadResult"></div>
+    <script>
+      function uploadFile() {
+        // 获取文件选择框
+        var fileInput = document.getElementById("fileToUpload");
+        // 创建一个FormData对象
+        var formData = new FormData();
+        // 将文件添加到FormData对象中
+        formData.append("fileToUpload", fileInput.files[0]);
+        // 创建一个XMLHttpRequest对象
+        var xhr = new XMLHttpRequest();
+        // 设置上传进度的回调函数
+        xhr.upload.onprogress = function (event) {
+          if (event.lengthComputable) {
+            var percentComplete = (event.loaded / event.total) * 100;
+            document.getElementById("uploadResult").innerHTML =
+              "上传进度：" + percentComplete.toFixed(2) + "%";
+          }
+        };
+        // 设置上传完成的回调函数
+        xhr.onload = function () {
+          if (xhr.status === 200) {
+            document.getElementById("uploadResult").innerHTML = "上传成功";
+          } else {
+            document.getElementById("uploadResult").innerHTML =
+              "上传失败：" + xhr.statusText;
+          }
+        };
+        // 设置上传错误的回调函数
+        xhr.onerror = function () {
+          document.getElementById("uploadResult").innerHTML = "上传错误";
+        };
+        // 发送POST请求
+        xhr.open("POST", "/upload");
+        xhr.send(formData);
+      }
+    </script>
+  </body>
+</html>

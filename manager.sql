@@ -10,9 +10,12 @@ Target Server Type    : MYSQL
 Target Server Version : 80024
 File Encoding         : 65001
 
+
+
+
 Date: 2023-02-24 14:34:18
 */
-
+use test;
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------

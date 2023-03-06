@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      li {
+        list-style: none;
+      }
+      .ob_content {
+        background: url("../../static/images/birds-7332433_960_720.jpg") no-repeat;
+        background-size: 100% 100%;
+        background-attachment: fixed;
+        padding: 40px;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        margin: 0;
+      }
+      .ob_title {
+        margin-bottom: 20px;
+        padding-left: 10px;
+        width: 100%;
+        height: 40px;
+        border-bottom: 2px solid black;
+        font-size: 25px;
+      }
+      .ob_select {
+        margin-top: 40px;
+        width: 50%;
+        height: 50px;
+        border: 1px solid #4e6ef2;
+        /* margin: 0 auto; */
+        display: flex;
+        /* justify-content: space-around; */
+        align-items: center;
+        border-radius: 15px;
+        border: 1px solid #4e6ef2;
+        box-shadow: 10px 10px 5px #888888;
+      }
+      .ob_select_ele {
+        background-color: #4e6ef2;
+        margin-left: 40px;
+        color: white;
+        display: block;
+        width: 156px;
+        height: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 15px;
+        border: 1px solid #4e6ef2;
+        box-shadow: 10px 10px 5px #888888;
+        cursor: pointer;
+      }
+      .ob_title1 {
+        margin-top: 50px;
+        padding-left: 10px;
+        width: 100%;
+        height: 40px;
+        border-bottom: 2px solid black;
+        font-size: 25px;
+      }
+      .ob_select1 {
+        display: flex;
+        /* justify-content: center; */
+        margin-top: 50px;
+        width: 100%;
+        height: 100%;
+      }
+      .ob_select_ele1 {
+        padding: 10px;
+        margin-left: 20px;
+        width: 40vw;
+        height: 500px;
+        display: flex;
+        flex-direction: column;
+        /* justify-content: space-around; */
+        align-items: center;
+        border: 1px solid skyblue;
+        background-color: #e7e6e6;
+        /* border-radius: 15px; */
+        /* border: 1px solid #4e6ef2; */
+        /* box-shadow: 10px 10px 5px #888888; */
+      }
+      .wait_ele {
+        font-size: 30px;
+        font-weight: 600;
+      }
+      .blank_el {
+        width: 45vw;
+        height: 27vh;
+        border: 1px solid skyblue;
+        margin-left: 10px;
+      }
+      .lost_ele {
+        width: 50%;
+        /* height: 100%; */
+      }
+      .lost_vedio {
+        background-color: white;
+        width: 90%;
+        height: 380px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .save {
+        background-color: #4472c4;
+        width: 143px;
+        height: 37px;
+        color: white;
+        /* text-align: center;
+        vertical-align: middle; */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+      .save_local {
+      }
+
+      #main {
+        width: 300px;
+        height: 126px;
+        overflow: hidden;
+      }
+      .blank {
+        height: 20px;
+      }
+      .ob_vedio {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="ob_content">
+      <div class="ob_title">素 材 选 择</div>
+      <div class="ob_select">
+        <!-- <div class="ob_select_ele" id="btn1">选择文件</div>
+        <div class="ob_select_ele" id="btn2">上传到服务器</div> -->
+        <form style="margin-left: 40px">
+          <input type="file" name="fileToUpload" id="wh" />
+          <!-- id="wh fileToUpload btn1" -->
+        </form>
+        <button type="button" id="btn2" onclick="uploadFile()">
+          上传到服务器
+        </button>
+      </div>
+      <div class="ob_title1">结 果 预 览</div>
+      <div class="ob_select1">
+        <div class="ob_select_ele1">
+          <div
+            style="
+              font-size: 25px;
+              font-weight: 700;
+              font-family: Times New Roman, Times, serif;
+              margin-bottom: 10px;
+            "
+          >
+            跟踪结果可视化
+          </div>
+          <div class="lost_vedio">
+            <img
+              class="lost_ele"
+              src="../../static/images/1.缺省页_暂无视频.png"
+              alt=""
+            />
+            <div class="ob_vedio">
+              <!-- <video
+              width="100%"
+              height="100%"
+              controls
+              autoplay
+              loop
+              src="../../static/vedio/2_tiger.mp4"
+            > -->
+            </div>
+            
+              <!-- <source src="../../static/vedio/2_tiger.mp4" type="video/mp4" />
+              <source src="../../static/vedio/2_tiger.mp4" type="video/ogg" />
+              您的浏览器不支持Video标签。 -->
+            </video>
+          </div>
+          <div
+            style="
+              width: 90%;
+              height: 20px;
+              font-size: 20px;
+              display: flex;
+              justify-content: space-between;
+              margin-top: 24px;
+            "
+          >
+            <div class="save save_database">保存</div>
+            <div class="save save_local">
+              <label for="input1"> 保存到本地 </label>
+              <!-- <input
+                type="file"
+                id="input1"
+                style="position: absolute; clip: rect(0 0 0 0)"
+              /> -->
+            </div>
+          </div>
+        </div>
+        <div class="ob_select_ele1">
+          <div
+            style="
+              font-size: 25px;
+              font-weight: 700;
+              font-family: Times New Roman, Times, serif;
+              margin-bottom: 10px;
+            "
+          >
+            目标信息
+          </div>
+          <div class="lost_vedio">
+            <img
+              class="lost_ele"
+              src="../../static/images/3.缺省页_等待中.png"
+              alt=""
+            />
+            <div id="main" style="display: none">
+              <div id="dom1">
+                <ul>
+                  <div class="blank"></div>
+                  <div class="blank"></div>
+                  <div class="blank"></div>
+                  <div class="blank"></div>
+                  <div class="blank"></div>
+                  <div class="blank"></div>
+                  <div class="blank"></div>
+                  <div class="blank"></div>
+                  <div class="blank"></div>
+                  <div class="blank"></div>
+                  <div class="blank"></div>
+                  <div class="blank"></div>
+                  <div class="blank"></div>
+                  <div class="blank"></div>
+                  <div class="blank"></div>
+                  <div class="blank"></div>
+                  <div class="blank"></div>
+                  <li>3,1,715,435,452,644,-1,-1,-1,-1</li>
+                  <li>4,1,712,436,449,643,-1,-1,-1,-1</li>
+                  <li>5,1,711,437,448,642,-1,-1,-1,-1</li>
+                  <li>6,1,711,441,444,638,-1,-1,-1,-1</li>
+                  <li>6,3,368,95,620,659,-1,-1,-1,-1</li>
+                  <li>7,1,711,443,444,636,-1,-1,-1,-1</li>
+                  <li>7,3,378,111,608,644,-1,-1,-1,-1</li>
+                  <li>8,1,711,444,444,635,-1,-1,-1,-1</li>
+                  <li>8,3,378,114,609,643,-1,-1,-1,-1</li>
+                  <li>9,1,709,444,446,635,-1,-1,-1,-1</li>
+                  <li>9,3,373,109,620,653,-1,-1,-1,-1</li>
+                  <li>10,1,706,443,449,636,-1,-1,-1,-1</li>
+                  <li>10,3,379,118,613,646,-1,-1,-1,-1</li>
+                  <li>11,1,705,443,450,636,-1,-1,-1,-1</li>
+                  <li>12,1,704,444,449,635,-1,-1,-1,-1</li>
+                  <li>15,1,692,434,465,645,-1,-1,-1,-1</li>
+                  <li>32,1,650,412,533,650,-1,-1,-1,-1</li>
+                  <li>32,3,343,121,629,628,-1,-1,-1,-1</li>
+                  <li>33,1,650,432,526,633,-1,-1,-1,-1</li>
+                  <li>33,3,331,94,639,634,-1,-1,-1,-1</li>
+                  <li>34,1,650,428,524,620,-1,-1,-1,-1</li>
+                  <li>34,3,332,87,635,628,-1,-1,-1,-1</li>
+                  <li>35,1,648,426,527,616,-1,-1,-1,-1</li>
+                  <li>35,3,332,84,634,626,-1,-1,-1,-1</li>
+                  <li>36,1,662,440,519,591,-1,-1,-1,-1</li>
+                  <li>36,3,331,82,632,624,-1,-1,-1,-1</li>
+                  <li>37,1,664,445,523,582,-1,-1,-1,-1</li>
+                  <li>37,3,330,81,633,623,-1,-1,-1,-1</li>
+                  <li>38,1,662,446,530,580,-1,-1,-1,-1</li>
+                  <li>38,3,329,80,633,624,-1,-1,-1,-1</li>
+                  <li>39,1,654,451,532,567,-1,-1,-1,-1</li>
+                  <li>39,3,324,68,619,613,-1,-1,-1,-1</li>
+                  <li>40,1,608,431,549,589,-1,-1,-1,-1</li>
+                  <li>40,3,326,75,600,593,-1,-1,-1,-1</li>
+                  <li>41,1,592,424,554,596,-1,-1,-1,-1</li>
+                  <li>41,3,327,77,593,587,-1,-1,-1,-1</li>
+                  <li>42,1,616,433,554,592,-1,-1,-1,-1</li>
+                  <li>42,3,329,83,590,583,-1,-1,-1,-1</li>
+                  <li>43,1,624,437,558,589,-1,-1,-1,-1</li>
+                  <li>43,3,329,85,591,582,-1,-1,-1,-1</li>
+                  <li>44,1,625,438,562,589,-1,-1,-1,-1</li>
+                  <li>44,3,329,85,592,582,-1,-1,-1,-1</li>
+                  <li>45,1,608,428,609,637,-1,-1,-1,-1</li>
+                  <li>45,3,332,86,592,579,-1,-1,-1,-1</li>
+                  <li>46,1,598,419,635,660,-1,-1,-1,-1</li>
+                  <li>46,3,327,82,593,579,-1,-1,-1,-1</li>
+                  <li>47,1,594,416,645,663,-1,-1,-1,-1</li>
+                  <li>47,3,325,80,594,579,-1,-1,-1,-1</li>
+                  <li>48,1,609,423,609,632,-1,-1,-1,-1</li>
+                  <li>48,3,333,88,578,560,-1,-1,-1,-1</li>
+                  <li>49,1,614,426,597,613,-1,-1,-1,-1</li>
+                  <li>49,3,335,91,574,553,-1,-1,-1,-1</li>
+                  <li>50,1,614,428,596,606,-1,-1,-1,-1</li>
+                  <li>50,3,335,92,574,551,-1,-1,-1,-1</li>
+                  <li>51,1,596,418,644,658,-1,-1,-1,-1</li>
+                  <li>51,3,341,96,579,551,-1,-1,-1,-1</li>
+                  <li>52,1,590,414,661,665,-1,-1,-1,-1</li>
+                  <li>52,3,353,106,571,540,-1,-1,-1,-1</li>
+                  <li>52,4,1169,82,462,544,-1,-1,-1,-1</li>
+                  <li>53,1,588,412,666,667,-1,-1,-1,-1</li>
+                  <li>53,3,355,110,571,535,-1,-1,-1,-1</li>
+                  <li>53,4,1171,83,458,543,-1,-1,-1,-1</li>
+                  <li>54,1,585,411,674,668,-1,-1,-1,-1</li>
+                  <li>54,3,328,71,605,575,-1,-1,-1,-1</li>
+                  <li>54,4,1175,81,460,551,-1,-1,-1,-1</li>
+                  <li>55,3,320,57,613,589,-1,-1,-1,-1</li>
+                  <li>55,4,1178,80,458,554,-1,-1,-1,-1</li>
+                  <li>56,3,319,51,613,595,-1,-1,-1,-1</li>
+                  <li>56,4,1179,80,457,555,-1,-1,-1,-1</li>
+                  <li>57,1,554,423,621,633,-1,-1,-1,-1</li>
+                  <li>57,3,322,53,609,595,-1,-1,-1,-1</li>
+                  <li>57,4,1177,78,457,557,-1,-1,-1,-1</li>
+                  <li>58,1,550,423,621,633,-1,-1,-1,-1</li>
+                  <li>58,3,331,65,592,578,-1,-1,-1,-1</li>
+                  <li>58,4,1168,75,460,561,-1,-1,-1,-1</li>
+                  <li>59,3,335,69,585,572,-1,-1,-1,-1</li>
+                  <li>59,4,1165,74,461,563,-1,-1,-1,-1</li>
+                  <li>60,1,591,435,627,644,-1,-1,-1,-1</li>
+                  <li>60,3,336,83,579,560,-1,-1,-1,-1</li>
+                  <li>60,4,1163,70,464,569,-1,-1,-1,-1</li>
+                  <li>61,1,597,437,626,642,-1,-1,-1,-1</li>
+                  <li>61,3,336,88,578,555,-1,-1,-1,-1</li>
+                  <li>61,4,1163,69,464,571,-1,-1,-1,-1</li>
+                  <li>62,1,600,438,624,641,-1,-1,-1,-1</li>
+                  <li>62,3,334,90,580,554,-1,-1,-1,-1</li>
+                  <li>62,4,1163,68,464,572,-1,-1,-1,-1</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- <textarea
+              style="display: none; width: 100%; height: 100%"
+              name=""
+              id="textarea"
+              cols="30"
+              rows="10"
+            >
+            </textarea> -->
+          </div>
+          <div
+            style="
+              width: 90%;
+              height: 20px;
+              font-size: 20px;
+              display: flex;
+              justify-content: space-between;
+              margin-top: 24px;
+            "
+          >
+            <div class="save save_database">保存</div>
+            <div class="save save_local">保存到本地</div>
+          </div>
+        </div>
+        <!-- <div class="wait_ele" style="display: none">开始跟踪，请等待。。。</div> -->
+        <!-- <div class="ob_select_ele1 blank_el"> -->
+        <!-- 目标信息滚动展示 -->
+        <!-- </div> -->
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  const saveAsJson = (str) => {
+    const blob = new Blob([str], { type: "application/json;charset=utf-8" });
+    const href = URL.createObjectURL(blob);
+    const alink = document.createElement("a");
+    alink.style.display = "none";
+    alink.download = "allProjects.mp4"; // 下载后文件名
+    alink.href = href;
+    document.body.appendChild(alink);
+    alink.click();
+    document.body.removeChild(alink); // 下载完成移除元素
+    URL.revokeObjectURL(href); // 释放掉blob对象
+  };
+  function uploadFile() {
+    let ob_vedio = document.querySelector(".ob_vedio");
+    let lost_ele = document.querySelectorAll(".lost_ele");
+    let message_text = document.querySelector("textarea");
+    let main = document.querySelector("#main");
+    alert("正在上传中...");
+    setTimeout(() => {
+      // ob_vedio.style.display = "block";
+      ob_vedio.style.display = "flex";
+      let video = document.createElement("video");
+      video.src = "../../static/vedio/2_tiger.mp4";
+      video.style.width = "100%";
+      // video.width = "400px";
+      // video.height = "100%";
+      video.controls = true;
+      video.autoplay = true;
+      video.loop = true;
+      lost_ele[0].setAttribute("style", "display: none");
+      lost_ele[1].setAttribute("style", "display: none");
+      ob_vedio.append(video)
+      main.setAttribute("style", "display: block;width: 100%; height: 100%");
+    }, 2000);
+  }
+  let save_database = document.querySelectorAll(".save_database");
+  let save_local = document.querySelectorAll(".save_local");
+  save_database.forEach((item) => {
+    item.addEventListener("click", () => {
+      alert("保存成功！");
+    });
+  });
+  save_local.forEach((item) => {
+    item.addEventListener("click", () => {
+      saveAsJson();
+    });
+  });
+</script>
+
+<script>
+  var main = document.getElementById("main");
+  var dom1 = document.getElementById("dom1");
+  //创建用于复制dom1的新节点
+  var newnode = document.createElement("div");
+  newnode.id = "dom2";
+  main.appendChild(newnode);
+  var dom2 = document.getElementById("dom2");
+  var speed = 6; //设置速度
+  dom2.innerHTML = dom1.innerHTML; //复制dom1节点
+  // 滚动函数
+  function moveTop() {
+    // 当main向上滚动超出部分>=滚动节点高度时, 设置为scrollTop为0
+    if (dom1.offsetHeight - main.scrollTop <= 0) {
+      main.scrollTop = 0;
+      // 或者main.scrollTop -= dom1.offsetHeight;
+    } else {
+      main.scrollTop++;
+    }
+  }
+
+  var myMarquee = setInterval(moveTop, speed); //设置定时器
+  // 鼠标悬停时清除定时器停止滚动，移出后继续滚动
+  main.onmouseover = function () {
+    clearInterval(myMarquee);
+  };
+  main.onmouseout = function () {
+    myMarquee = setInterval(moveTop, speed);
+  };
+</script>

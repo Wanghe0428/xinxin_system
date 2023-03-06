@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>濒危动物跟踪系统简介</title>
+  </head>
+  <style>
+    .content {
+      width: 100vw;
+      height: 100vh;
+      padding: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: url("../../static/images/birds-7332433_960_720.jpg") no-repeat;
+      background-size: 100% 100%;
+      background-attachment: fixed;
+
+      /* filter: opacity(0.3); */
+    }
+    .left_container {
+      width: 30%;
+      margin-right: 100px;
+    }
+    .right_container {
+      width: 45%;
+      /* height: 30vh; */
+    }
+    .title {
+      font-family: "楷体";
+      color: #548235;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    .back {
+      width: 146px;
+      height: 36px;
+      line-height: 36px;
+      text-align: center;
+      cursor: pointer;
+      background-color: #548235;
+      color: white;
+      font-family: "楷体";
+      font-weight: 600;
+    }
+    .message {
+      font-size: 18px;
+      color: #548235;
+      font-weight: 600;
+    }
+  </style>
+  <body>
+    <div class="content">
+      <div class="left_container">
+        <div class="title">
+          <h1 style="color: #548235; font-size: 40px; margin-top: 62px">
+            简介
+          </h1>
+          <!-- <img src="../../static/images/14.鹤.JPG" alt="这是一只鹤" /> -->
+        </div>
+        <p class="message">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          重庆邮电大学2020级计算机技术专业，肖欣欣毕业系统作品:濒危动物跟踪系统。
+        </p>
+        <p class="message">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本系统采用Web应用框架Django进行搭建，前后端采用AJAX异步通信，完成信息间的交互工作，选择Mysql数据库存储数据，保障用户数据的安全性。
+          择Mysql数据库存储数据，保障用户数据的安全性。
+        </p>
+        <p class="message">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
+          关键跟踪算法基于python语言和深度学习框架Pytorh进行构建，结合了小样本目标检测算法，数据增强方法和相关度量方法、匹配算法来实现，其整体架构如右图所示。
+        </p>
+        <div class="back" onclick="window.history.back()">已阅，返回登录页</div>
+      </div>
+      <div class="right_container">
+        <img width="100%" src="../../static/images/17.公式.JPG" alt="" />
+      </div>
+    </div>
+  </body>
+</html>

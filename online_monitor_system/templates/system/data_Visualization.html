@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .ob_content {
+        background: url("../../static/images/birds-7332433_960_720.jpg")
+          no-repeat;
+        background-size: 100% 100%;
+        background-attachment: fixed;
+        padding: 40px;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        margin: 0;
+      }
+      .ob_title {
+        margin-bottom: 20px;
+        padding-left: 10px;
+        width: 100%;
+        height: 40px;
+        border-bottom: 2px solid black;
+        font-size: 25px;
+      }
+      .ob_select {
+        margin-top: 40px;
+        width: 50%;
+        height: 50px;
+        border: 1px solid #4e6ef2;
+        /* margin: 0 auto; */
+        display: flex;
+        /* justify-content: space-around; */
+        align-items: center;
+        border-radius: 15px;
+        border: 1px solid #4e6ef2;
+        box-shadow: 10px 10px 5px #888888;
+      }
+      .ob_select_ele {
+        background-color: #4e6ef2;
+        margin-left: 40px;
+        color: white;
+        display: block;
+        width: 156px;
+        height: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 15px;
+        border: 1px solid #4e6ef2;
+        box-shadow: 10px 10px 5px #888888;
+        cursor: pointer;
+      }
+      .ob_title1 {
+        margin-top: 50px;
+        padding-left: 10px;
+        width: 100%;
+        height: 40px;
+        border-bottom: 2px solid black;
+        font-size: 25px;
+      }
+      .ob_select1 {
+        display: flex;
+        /* justify-content: center; */
+        margin-top: 50px;
+        width: 100%;
+        height: 100%;
+      }
+      .ob_select_ele1 {
+        padding: 10px;
+        margin-left: 20px;
+        width: 40vw;
+        height: 500px;
+        display: flex;
+        flex-direction: column;
+        /* justify-content: space-around; */
+        align-items: center;
+        border: 1px solid skyblue;
+        background-color: #e7e6e6;
+        /* border-radius: 15px; */
+        /* border: 1px solid #4e6ef2; */
+        /* box-shadow: 10px 10px 5px #888888; */
+      }
+      .wait_ele {
+        font-size: 30px;
+        font-weight: 600;
+      }
+      .blank_el {
+        width: 45vw;
+        height: 27vh;
+        border: 1px solid skyblue;
+        margin-left: 10px;
+      }
+      .lost_ele {
+        width: 50%;
+        /* height: 100%; */
+      }
+      .lost_vedio {
+        background-color: white;
+        width: 90%;
+        height: 380px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .save {
+        background-color: #4472c4;
+        width: 143px;
+        height: 37px;
+        color: white;
+        /* text-align: center;
+        vertical-align: middle; */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+      .save_local {
+      }
+      /* .ob_vedio {
+        width: 100%;
+        height: 100%;
+      } */
+    </style>
+  </head>
+  <body>
+    <div class="ob_content">
+      <div class="ob_title">素 材 选 择</div>
+      <div class="ob_select">
+        <!-- <div class="ob_select_ele" id="btn1">选择文件</div>
+        <div class="ob_select_ele" id="btn2">上传到服务器</div> -->
+        <form style="margin-left: 40px">
+          <input type="file" name="fileToUpload" id="wh" />
+          <!-- id="wh fileToUpload btn1" -->
+        </form>
+        <button type="button" id="btn2" onclick="uploadFile()">
+          上传到服务器
+        </button>
+      </div>
+      <div class="ob_title1">结 果 预 览</div>
+      <div class="ob_select1">
+        <div class="ob_select_ele1">
+          <div
+            style="
+              font-size: 25px;
+              font-weight: 700;
+              font-family: Times New Roman, Times, serif;
+              margin-bottom: 10px;
+            "
+          >
+            轨迹结果可视化
+          </div>
+          <div class="lost_vedio">
+            <img
+              class="lost_ele"
+              src="../../static/images/3.缺省页_等待中.png"
+              alt=""
+            />
+            <img
+              style="display: none"
+              class="gif"
+              width="100%"
+              src="../../static/images/16.trajectory2.gif"
+              alt=""
+            />
+          </div>
+          <div
+            style="
+              width: 90%;
+              height: 20px;
+              font-size: 20px;
+              display: flex;
+              justify-content: space-between;
+              margin-top: 24px;
+            "
+          >
+            <div class="save save_database">保存</div>
+            <div class="save save_local">
+              <label for="input1"> 保存到本地 </label>
+              <!-- <input
+                type="file"
+                id="input1"
+                style="position: absolute; clip: rect(0 0 0 0)"
+              /> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  const saveAsJson = (str) => {
+    const blob = new Blob([str], { type: "application/json;charset=utf-8" });
+    const href = URL.createObjectURL(blob);
+    const alink = document.createElement("a");
+    alink.style.display = "none";
+    alink.download = "allProjects.mp4"; // 下载后文件名
+    alink.href = href;
+    document.body.appendChild(alink);
+    alink.click();
+    document.body.removeChild(alink); // 下载完成移除元素
+    URL.revokeObjectURL(href); // 释放掉blob对象
+  };
+  function uploadFile() {
+    let gif = document.querySelector(".gif");
+    let lost_ele = document.querySelector(".lost_ele");
+    let message_text = document.querySelector("textarea");
+    alert("正在上传中...");
+    setTimeout(() => {
+      gif.setAttribute("style", "display: block; float: left; z-index: 1000");
+      lost_ele.setAttribute("style", "display: none");
+    }, 2000);
+  }
+  let save_database = document.querySelectorAll(".save_database");
+  let save_local = document.querySelectorAll(".save_local");
+  save_database.forEach((item) => {
+    item.addEventListener("click", () => {
+      alert("保存成功！");
+    });
+  });
+  save_local.forEach((item) => {
+    item.addEventListener("click", () => {
+      saveAsJson();
+    });
+  });
+</script>

@@ -813,7 +813,7 @@ INSERT INTO `sys_role_menu` VALUES ('e29365ef564211ec99ea1cbfc0546006', 'bf73846
 INSERT INTO `sys_role_menu` VALUES ('eeccf827e9f911eb89bd1cbfc0546006', 'bf738462638411ebb6d82cf05d231dfa', '普通用户', '6f396f624be011ebbf3f3c970ed7519c', '系统设置');
 INSERT INTO `sys_role_menu` VALUES ('eecfb788e9f911eb95bf1cbfc0546006', 'bf738462638411ebb6d82cf05d231dfa', '普通用户', '6f4093824be011eba0d63c970ed7519c', '菜单管理');
 INSERT INTO `sys_role_menu` VALUES ('eed16418e9f911eb82dc1cbfc0546006', 'bf738462638411ebb6d82cf05d231dfa', '普通用户', '6f3e32254be011ebaa0d3c970ed7519c', '数据权限');
-
+INSERT INTO `sys_role_menu` VALUES ('eed16418e9f911eb82dc1cbfc0546006', 'bf738462638411ebb6d82cf05d231dfa', '普通用户', '6f3e32254be011ebaa0d3c970ed7519c', '数据分析');
 -- ----------------------------
 -- Table structure for sys_theme
 -- ----------------------------

@@ -27,7 +27,7 @@ layui.use(['layer', 'form', 'element', 'jquery', 'dialog'], function() {
 				id: id
 			});
 			element.tabChange('tab', id);
-			
+
 		}
 		mainLayout.removeClass('hide-side');
 	});
@@ -51,7 +51,6 @@ layui.use(['layer', 'form', 'element', 'jquery', 'dialog'], function() {
 				id: id
 			});
 			element.tabChange('tab', id);
-			
 		}
 		mainLayout.removeClass('hide-side');
 	});

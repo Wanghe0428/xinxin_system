@@ -89,4 +89,10 @@ urlpatterns = [
     url(r'^feedback_detail.html', views.feedback_detail),
     url(r'^insert_feedback_detail', views.insert_feedback_detail),
     url(r'^change_org.html', views.change_org),
+    # 新加页面
+    url(r'^resource_manage.html', views.resource_manage),
+    url(r'^online_observe.html', views.online_observe),
+    url(r'^title.html', views.title),
+    url(r'^about.html', views.about),
+    url(r'^data_Visualization.html', views.data_Visualization),
 ]

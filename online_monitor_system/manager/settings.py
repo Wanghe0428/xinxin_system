@@ -88,9 +88,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'manager',
+        'NAME': 'test',
         'USER': 'root',
-        'PASSWORD': '123456',
+        'PASSWORD': 'wh13403896149WH',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
